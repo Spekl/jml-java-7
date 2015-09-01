@@ -25,7 +25,7 @@ package java.io;
  * @author David Cok
  *  (following Leaven's spec of OutputStream)
  */
-public abstract class InputStream {
+public abstract class InputStream implements Closeable {
     // FIXME: availableBytes may change asynchronously, but presumably only increases
     // FIXME: This spec does not reflect the blocking that can occur (needs when clauses)
 
@@ -47,19 +47,19 @@ public abstract class InputStream {
     //@ public model \bigint readPosition; in streamState;
     //@    public initially readPosition == 0;
 
-    //@ public invariant readPosition >= 0;
-    //@ public invariant readPosition+availableBytes <= inputBytes.length;
-
     //-RAC@ public model int availableBytes; in streamState;
     //-RAC@ public model boolean isOpen; in streamState;
     //-RAC@ public model boolean wasClosed; in streamState;
     //-RAC@ public represents wasClosed = !isOpen;
 
     //-RAC@ public invariant availableBytes >= 0;
+    //-RAC@ public invariant readPosition >= 0;
+    //-RAC@ public invariant readPosition+availableBytes <= inputBytes.length;
+
 
     //@ requires a != null && b != null;
     //@ requires a.length >= length && b.length >= length;
-    //@ ensures (\forall int i; 0<=i && i < length; a[i] == b[i]);
+    //@ ensures (\forall int i; 0<=i && i < (int)length; a[i] == b[i]); // FIXME - when arithmetic modes are supported, we can allow indices in JML annotations to be \bigint
     //@ public static model boolean equalBytes(byte[] a, byte[] b, \bigint length);
 
     /*-RAC@ public normal_behavior
@@ -69,7 +69,7 @@ public abstract class InputStream {
       @ pure public model boolean initialInputStream();
       @*/
 
-    /*@ public normal_behavior
+    /*-RAC@ public normal_behavior
       @   ensures initialInputStream();
       @*/
     //@ pure
@@ -82,7 +82,7 @@ public abstract class InputStream {
       @*/
     public void close() throws IOException;
 
-     FIXME - blocks until availableBytes > 0, if not at end of input
+    // FIXME - blocks until availableBytes > 0, if not at end of input
     /*-RAC@ public normal_behavior
     @   requires isOpen && (inputBytes.length == readPosition);
     @   modifies \nothing;
@@ -198,7 +198,7 @@ public abstract class InputStream {
     @   requires !isOpen;
     @   modifies \nothing;
     @   signals_only IOException;
-    */
+    @*/
     public long skip(long n) throws IOException;
 
     /*-RAC@ public behavior
@@ -207,8 +207,8 @@ public abstract class InputStream {
     @ also public exceptional_behavior
     @   requires !isOpen;
     @   signals_only IOException;
-    @ pure
     @*/
+    //@ pure
     public int available() throws IOException;
 
     //-RAC@ public model boolean _markSupported; in objectState;
@@ -227,13 +227,12 @@ public abstract class InputStream {
     @   modifies markPosition, markLimit;
     @   ensures markPosition == readPosition;
     @   ensures markLimit >= readPosition + readLimit;
-    */
+    @*/
     public synchronized void mark(int readLimit);
 
-    /*-RAC@ public normal_behavior
-    @   ensures \result == _markSupported;
-    @ pure
-    @*/
+    //-RAC@ public normal_behavior
+    //-RAC@   ensures \result == _markSupported;
+    //@ pure
     public boolean markSupported();
 
     /*-RAC@ public behavior

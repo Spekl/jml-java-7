@@ -27,7 +27,7 @@ package java.util;
  * @version $Revision: 1299 $
  * @author Gary T. Leavens
  */
-public interface ListIterator extends Iterator {
+public interface ListIterator<E> extends Iterator<E> {
 
     //@ model instance int cursor_position; in objectState;
 
@@ -35,11 +35,11 @@ public interface ListIterator extends Iterator {
 
     /*@ pure @*/ boolean hasNext();
 
-    Object next();
+    E next();
 
     /*@ pure @*/ boolean hasPrevious();
 
-    Object previous();
+    E previous();
 
     /*@ pure @*/ int nextIndex();
 
@@ -50,7 +50,7 @@ public interface ListIterator extends Iterator {
 
     void remove();
 
-    void set(Object o);
+    void set(E o);
 
-    void add(Object o);
+    void add(E o);
 }

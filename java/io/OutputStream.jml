@@ -27,7 +27,7 @@ package java.io;
 /** JML's specification of OutputStream.
  * @author Gary T. Leavens
  */
-public abstract class OutputStream extends Object {
+public abstract class OutputStream extends Object implements Closeable, Flushable {
 
     // FIELDS
     /** The output data group is used to specify things like caching,
@@ -48,7 +48,7 @@ public abstract class OutputStream extends Object {
     //-RAC@ public invariant wasClosed ==> !isOpen;
 
     // wasClosed can only change to true, not back to false
-    //@ public constraint \old(wasClosed) ==> wasClosed;
+    //-RAC@ public constraint \old(wasClosed) ==> wasClosed;
 
     // METHODS AND CONSTRUCTORS
 

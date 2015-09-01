@@ -1,5 +1,3 @@
-// @(#)$Id$
-
 // Copyright (C) 2003 Iowa State University
 
 // This file is part of JML
@@ -23,6 +21,7 @@ package java.util;
 import java.io.Serializable;
 import java.text.DateFormat;
 
+// This file has changes from 1.4 to 1.5 to 1.6 that are no accurately captured - FIXME
 
 /** JML's specification of java.util.Calendar.
  * Some of this specification is taken from ESC/Java.
@@ -30,7 +29,7 @@ import java.text.DateFormat;
  * @author Kristina Boysen
  * @author Gary T. Leavens
  */
-public abstract class Calendar implements Serializable, Cloneable {
+public abstract class Calendar implements Serializable, Cloneable, Comparable<Calendar> {
 
     public final static int ERA;
     public final static int YEAR;
@@ -78,20 +77,20 @@ public abstract class Calendar implements Serializable, Cloneable {
     
     protected /*@ spec_public @*/ int []        fields; 
     protected /*@ spec_public @*/ boolean []    isSet; 
-    transient /*@ spec_public @*/ int []        stamp;
+    transient /*@ spec_public @*/ private int []        stamp;
     protected /*@ spec_public @*/ long          time;
     protected /*@ spec_public @*/ boolean       isTimeSet; 
     protected /*@ spec_public @*/ boolean       areFieldsSet; 
     transient /*@ spec_public @*/ boolean       areAllFieldsSet;
-    //@ public model boolean       lenient;
-    //@ public model TimeZone      zone;
-    //@ public model int           firstDayOfWeek;
-    //@ public model int           minimalDaysInFirstWeek;
-    //@ public model static        Hashtable cachedLocaleData;
+    private   /*@ spec_public @*/ boolean       lenient;
+    private   /*@ spec_public @*/ TimeZone      zone;
+    private   /*@ spec_public @*/ int           firstDayOfWeek;
+    private   /*@ spec_public @*/ int           minimalDaysInFirstWeek;
+    private   /*@ spec_public @*/ static        Hashtable<Locale,int[]> cachedLocaleData;
     
-    /*@ spec_public @*/ static final int UNSET;
-    /*@ spec_public @*/ static final int INTERNALLY_SET;
-    /*@ spec_public @*/ static final int MINIMUM_USER_STAMP;
+    private /*@ spec_public @*/ static final int UNSET;
+    private /*@ spec_public @*/ static final int COMPUTED;
+    private /*@ spec_public @*/ static final int MINIMUM_USER_STAMP;
 
     static final int currentSerialVersion;
     static final long serialVersionUID;
@@ -340,7 +339,7 @@ public abstract class Calendar implements Serializable, Cloneable {
        @                this.minimalDaysInFirstWeek == calendar.minimalDaysInFirstWeek &&
        @                zone.equals(calendar.zone);
        @*/
-    public /*@ pure @*/ boolean equals(/*@ nullable \readonly @*/ Object obj);
+    public /*@ pure @*/ boolean equals(Object obj);
 
     // Specification is inherited
     public int hashCode();

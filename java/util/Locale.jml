@@ -98,7 +98,7 @@ public final class Locale implements Cloneable, Serializable {
     public /*@pure*/ /*@non_null*/ String getDisplayName(/*@non_null*/ Locale inLocale);
     public /*@non_null*/ Object clone();
 
-    public synchronized int hashCode();
+    public int hashCode();
 
     public /*@ pure @*/ boolean equals(/*@nullable*/Object obj);
 }

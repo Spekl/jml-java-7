@@ -10,12 +10,16 @@ public class FileOutputStream extends OutputStream {
       @ 
       @*/
 
-    // FIELDS
-    //@ private model FileDescriptor fd;
-    //@ private model FileChannel channel;
-    //@ initially channel == null;
-    //@ private model boolean append;
-    //@ initially append == false;
+    // FIELDS - FIXME these rename private fields
+    //@ spec_public
+	final private FileDescriptor fd;
+    // @ private model FileChannel channel;
+    // @ initially channel == null;
+    // added this model field because the real thing is private and we
+    // shouldn't be relying on it in the spec (especially since it goes
+    // away in future Java versions) (dmz, 2009-11-17)
+    //-RAC@ public model boolean append_flag;
+    //-RAC@ initially append_flag == false;
 
     // METHODS AND CONSTRUCTORS
 
@@ -24,7 +28,7 @@ public class FileOutputStream extends OutputStream {
       @   requires name != null;
       @   assignable \nothing;
       @   ensures !wasClosed && isOpen && outputBytes.length == 0 
-      @           && append == false;
+      @           && append_flag == false;
       @ also
       @ public exceptional_behavior
       @   signals_only NullPointerException, FileNotFoundException;
@@ -38,7 +42,7 @@ public class FileOutputStream extends OutputStream {
       @   requires name != null;
       @   assignable \not_specified;
       @   ensures !wasClosed && isOpen && outputBytes.length == 0 
-      @           && this.append == append;
+      @           && this.append_flag == append;
       @ also
       @ public exceptional_behavior
       @   signals_only NullPointerException, FileNotFoundException;
@@ -52,7 +56,7 @@ public class FileOutputStream extends OutputStream {
       @   requires file != null;
       @   assignable \not_specified;
       @   ensures !wasClosed && isOpen && outputBytes.length == 0 
-      @           && this.append == false;
+      @           && this.append_flag == false;
       @ also
       @ public exceptional_behavior
       @   signals_only NullPointerException, FileNotFoundException;
@@ -66,7 +70,7 @@ public class FileOutputStream extends OutputStream {
       @   requires file != null;
       @   assignable \not_specified;
       @   ensures !wasClosed && isOpen && outputBytes.length == 0 
-      @           && this.append == append;
+      @           && this.append_flag == append;
       @ also
       @ public exceptional_behavior
       @   signals_only NullPointerException, FileNotFoundException;
@@ -79,7 +83,7 @@ public class FileOutputStream extends OutputStream {
       @ public normal_behavior
       @   assignable \not_specified;
       @   ensures !wasClosed && isOpen && outputBytes.length == 0 
-      @           && this.append == false && fd == fdObj;
+      @           && this.append_flag == false && fd == fdObj;
       @ also
       @ public exceptional_behavior
       @   signals_only NullPointerException;

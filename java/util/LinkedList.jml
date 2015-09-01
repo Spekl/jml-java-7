@@ -1,5 +1,3 @@
-// @(#)$Id$
-
 // Copyright (C) 2003 Iowa State University
 
 // This file is part of JML
@@ -27,60 +25,55 @@ package java.util;
  * @author Erik Poll
  */
 
-public class LinkedList extends AbstractSequentialList
-    implements List, Cloneable, java.io.Serializable
+public class LinkedList<E> extends AbstractSequentialList<E>
+    implements List<E>, Cloneable, java.io.Serializable, Iterable<E>, Collection<E>, Queue<E>
 {
 	
     /*@ public normal_behavior
       @   ensures isEmpty();
       @   ensures containsNull;
-      @   ensures elementType == \type(Object);
       @*/
     /*@ pure @*/ public LinkedList();
           
     /*@ public normal_behavior
       @   requires c != null;
       @   ensures containsNull == c.containsNull;
-      @   ensures elementType == c.elementType;
       @ also
       @   public exceptional_behavior
       @     requires c == null;
       @     signals_only NullPointerException;
       @*/
-    /*@ pure @*/ public LinkedList(Collection c);
+    /*@ pure @*/ public LinkedList(Collection<? extends E> c);
     
     /*@  public normal_behavior
       @    requires !isEmpty();
       @    ensures !containsNull ==> \result != null;
-      @    ensures (\result == null) || \typeof(\result) <: elementType;
       @    ensures \result == get(0);
       @ also
       @  public exceptional_behavior
       @    requires isEmpty();
       @    signals_only NoSuchElementException;
       @*/
-    public /*@ pure @*/ Object getFirst();
+    public /*@ pure @*/ E getFirst();
     
     /*@  public normal_behavior
       @    requires !isEmpty();
       @    ensures !containsNull ==> \result != null;
-      @    ensures (\result == null) || \typeof(\result) <: elementType;
       @    ensures \result == get(size()-1);
       @ also
       @  public exceptional_behavior
       @    requires isEmpty();
       @    signals_only NoSuchElementException; 
       @*/
-    public /*@ pure @*/ Object getLast();
+    public /*@ pure @*/ E getLast();
 
     /*@  public normal_behavior
       @    requires !isEmpty();
       @     assignable objectState;
       @    ensures !containsNull ==> \result != null;
-      @    ensures ((\result == null) || \typeof(\result) <: elementType);
       @    ensures \result == get(0);
       @    ensures size() == \old(size()-1);
-      @    ensures \not_modified(containsNull,elementType);
+      @    ensures \not_modified(containsNull);
       @    ensures (\forall int i; 0<=i && i<size();
                                  get(i) == \old(get(i+1)));
       @ also
@@ -89,16 +82,15 @@ public class LinkedList extends AbstractSequentialList
       @    assignable \nothing;
       @    signals_only NoSuchElementException;
       @*/    
-    public Object removeFirst();
+    public E removeFirst();
  
     /*@  public behavior
       @    requires !isEmpty();
       @    assignable objectState;
       @    ensures !containsNull ==> \result != null;
-      @    ensures ((\result == null) || \typeof(\result) <: elementType);
       @    ensures \result == get(0);
       @    ensures size() == \old(size()-1);
-      @    ensures \not_modified(containsNull,elementType);
+      @    ensures \not_modified(containsNull);
       @    ensures (\forall int i; 0<=i && i<size();
                                  get(i) == \old(get(i)));
       @ also 
@@ -107,57 +99,55 @@ public class LinkedList extends AbstractSequentialList
       @    assignable \nothing;
       @    signals_only NoSuchElementException;
       @*/     
-    public Object removeLast();
+    public E removeLast();
   
     /*@ public normal_behavior
       @    requires containsNull || o != null;
-      @    requires o == null || \typeof(o) <: elementType;
       @    assignable objectState;
       @    ensures size() == \old(size()+1);
-      @    ensures \not_modified(containsNull,elementType);
+      @    ensures \not_modified(containsNull);
       @    ensures get(0) == o;
       @    ensures (\forall int i; 1<=i && i<size();
                                  get(i) == \old(get(i-1)));
       @*/    
-    public void addFirst(Object o);
+    public void addFirst(E o);
 
     /*@ public normal_behavior
       @    requires containsNull || o != null;
-      @    requires o == null || \typeof(o) <: elementType;
       @    assignable objectState;
       @    ensures size() == \old(size()+1);
-      @    ensures \not_modified(containsNull,elementType);
+      @    ensures \not_modified(containsNull);
       @    ensures get(size()-1) == o;
       @    ensures (\forall int i; 0<=i && i<(size()-1);
                                  get(i) == \old(get(i)));
       @*/     
-    public void addLast(Object o);
+    public void addLast(E o);
     
     // -- all other methods are specified by List --
     //@ pure
-    public boolean contains(/*@nullable*/Object o);
+    public boolean contains(Object o);
     
     //@ pure
     public int size();
     
-    public boolean add(/*@nullable*/Object o);
+    public boolean add(E o);
 
-    public boolean remove(/*@nullable*/Object o);
+    public boolean remove(Object o);
     
-    public boolean addAll(Collection c);
+    public boolean addAll(Collection<? extends E> c);
     
-    public boolean addAll(int index, Collection c);
+    public boolean addAll(int index, Collection<? extends E> c);
     
     public void clear();
     
     //@ pure
-    public Object get(int index);
+    public E get(int index);
     
-    public Object set(int index, Object element);
+    public E set(int index, E element);
     
-    public void add(int index, Object element);
+    public void add(int index, E element);
     
-    public Object remove(int index);
+    public E remove(int index);
     
     //@ pure
     public int indexOf(Object o);
@@ -166,7 +156,7 @@ public class LinkedList extends AbstractSequentialList
     public int lastIndexOf(Object o);
     
     //@ pure
-    public ListIterator listIterator(int index);
+    public ListIterator<E> listIterator(int index);
     
     /*@ also
       @   public normal_behavior
@@ -179,5 +169,5 @@ public class LinkedList extends AbstractSequentialList
     //@ pure
     public Object[] toArray();
     
-    public Object[] toArray(Object[] a);
+    public <T> T[] toArray(T[] a);
 }

@@ -32,7 +32,7 @@ public class Properties extends Hashtable{
 
     public void list(java.io.PrintWriter out);
 
-    public java.util.Enumeration propertyNames();
+    public java.util.Enumeration<?> propertyNames();
 
     public synchronized void save(java.io.OutputStream out, String s);
 

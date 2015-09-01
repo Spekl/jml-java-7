@@ -20,7 +20,7 @@
 
 package java.util.regex;
 
-public final class Matcher {
+public final class Matcher implements MatchResult {
 
     //@ pure
     Matcher();

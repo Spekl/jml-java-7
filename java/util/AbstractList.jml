@@ -26,7 +26,7 @@ package java.util;
  * @author Gary T. Leavens
  * @author David R. Cok
  */
-public abstract class AbstractList extends AbstractCollection implements List {
+public abstract class AbstractList<E> extends AbstractCollection<E> implements List<E> {
 
     /*@ public normal_behavior
       @   ensures \result <==> ( initialAbstractCollection() && initialList());
@@ -39,19 +39,19 @@ public abstract class AbstractList extends AbstractCollection implements List {
     /*@ pure @*/ protected AbstractList();
 
     // specification inherited from List
-    public boolean add(/*@nullable*/Object o);
+    public boolean add(E o);
 
     // specification inherited from List
-    abstract public /*@ pure @*/ Object get(int index);
+    abstract public /*@ pure @*/ E get(int index);
 
     // specification inherited from List
-    public Object set(int index, Object element) throws UnsupportedOperationException;
+    public E set(int index, E element) throws UnsupportedOperationException;
 
     // specification inherited from List
-    public void add(int index, Object element) throws UnsupportedOperationException;
+    public void add(int index, E element) throws UnsupportedOperationException;
 
     // specification inherited from List
-    public Object remove(int index) throws UnsupportedOperationException;
+    public E remove(int index) throws UnsupportedOperationException;
 
     // Search Operations
 
@@ -67,25 +67,25 @@ public abstract class AbstractList extends AbstractCollection implements List {
     public void clear();
 
     // specification inherited from List
-    public boolean addAll(int index, Collection c);
+    public boolean addAll(int index, Collection<? extends E> c);
 
     // Iterators
 
     // specification inherited from List
-    public /*@ pure @*/ Iterator iterator();
+    public /*@ pure @*/ Iterator<E> iterator();
 
-    public /*@ pure @*/ ListIterator listIterator();
-
-    // specification inherited from List
-    public /*@ pure @*/ ListIterator listIterator(final int index);
+    public /*@ pure @*/ ListIterator<E> listIterator();
 
     // specification inherited from List
-    public /*@ pure @*/ List subList(int fromIndex, int toIndex);
+    public /*@ pure @*/ ListIterator<E> listIterator(final int index);
+
+    // specification inherited from List
+    public /*@ pure @*/ List<E> subList(int fromIndex, int toIndex);
 
     // Comparison and hashing
 
     // specification inherited from Object
-    public /*@ pure @*/ boolean equals(/*@nullable*/Object o);
+    public /*@ pure @*/ boolean equals(Object o);
 
     // specification inherited from Object
     public /*@ pure @*/ int hashCode();
@@ -98,7 +98,7 @@ public abstract class AbstractList extends AbstractCollection implements List {
       @   also
       @     old int mn = toIndex < size() ? toIndex : size();
       @     requires fromIndex < toIndex;
-      @     ensures \not_modified(containsNull,elementType);
+      @     ensures \not_modified(containsNull);
       @     assignable objectState;
       @     ensures size() == \old(size()) - (mn-fromIndex);
       @     ensures (\forall int i; 0<=i && i < fromIndex;
@@ -118,38 +118,40 @@ public abstract class AbstractList extends AbstractCollection implements List {
 
 }
 
-class SubList extends AbstractList {
+/* This is not in 1.6 apparently
+class SubList<E> extends AbstractList<E> {
 
-    SubList(AbstractList list, int fromIndex, int toIndex);
+    SubList(AbstractList<E> list, int fromIndex, int toIndex);
 
-    public Object set(int index, Object element);
+    public E set(int index, E element);
 
-    public Object get(int index);
+    public E get(int index);
 
     public int size();
 
-    public void add(int index, Object element);
+    public void add(int index, E element);
 
-    public Object remove(int index);
+    public E remove(int index);
 
     protected void removeRange(int fromIndex, int toIndex);
 
-    public boolean addAll(Collection c);
+    public boolean addAll(Collection<? extends E> c);
 
-    public boolean addAll(int index, Collection c);
+    public boolean addAll(int index, Collection<? extends E> c);
 
-    public Iterator iterator();
+    public Iterator<E> iterator();
 
-    public ListIterator listIterator(int index);
+    public ListIterator<E> listIterator(int index);
 
-    public List subList(int fromIndex, int toIndex);
+    public List<E> subList(int fromIndex, int toIndex);
 }
 
 
 
-class RandomAccessSubList extends SubList implements RandomAccess {
+class RandomAccessSubList<E> extends SubList<E> implements RandomAccess {
 
-    RandomAccessSubList(AbstractList list, int fromIndex, int toIndex);
+    RandomAccessSubList(AbstractList<E> list, int fromIndex, int toIndex);
 
-    public List subList(int fromIndex, int toIndex);
+    public List<E> subList(int fromIndex, int toIndex);
 }
+*/

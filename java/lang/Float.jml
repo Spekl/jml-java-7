@@ -30,7 +30,7 @@ package java.lang;
 public /*@ pure @*/ final class Float extends Number implements Comparable {
     
     //@ public model float theFloat;
-    //@ public represents theFloat <- floatValue();
+    //@ public represents theFloat = floatValue();
     
     /** Returns true if the string is parseable as a float value (but not
 	an infinite or NaN value).
@@ -74,9 +74,9 @@ public /*@ pure @*/ final class Float extends Number implements Comparable {
 
     public static final float MIN_VALUE;
 
-    public static final Class TYPE;
-    //@ initially TYPE == \type(float);
-    //@ invariant_redundantly TYPE == float.class;
+    public static final Class<Float> TYPE;
+    //@ public initially TYPE == float.class;
+    //@ public invariant_redundantly TYPE == float.class;
 
     /*@ public normal_behavior
       @   ensures !isNaN(f) && !isInfinite(f) ==> parseable(\result);
@@ -213,7 +213,7 @@ public /*@ pure @*/ final class Float extends Number implements Comparable {
       @     requires obj != null && !(obj instanceof Float);
       @     ensures !\result;
       @*/
-    public boolean equals(/*@\readonly*//*@nullable*/Object obj);
+    public boolean equals(Object obj);
 
     /*@ public normal_behavior
       @ {|
@@ -236,7 +236,7 @@ public /*@ pure @*/ final class Float extends Number implements Comparable {
       @     requires !isNaN(value);
       @     ensures intBitsToFloat(\result) == value;
       @*/
-    public static /*@ pure @*/ native int floatToIntBits(float value);
+    public static /*@ pure @*/ int floatToIntBits(float value);
 
     /*@ public normal_behavior
       @ {|
@@ -259,7 +259,7 @@ public /*@ pure @*/ final class Float extends Number implements Comparable {
       @     requires !isNaN(value);
       @     ensures intBitsToFloat(\result) == value;
       @*/
-    public static /*@ pure @*/ native int floatToRawIntBits(float value);
+    public static /*@ pure @*/ int floatToRawIntBits(float value);
 
     /*@ public normal_behavior
       @ {|
@@ -277,7 +277,7 @@ public /*@ pure @*/ final class Float extends Number implements Comparable {
       @              the same bit pattern as bits *);
       @ |}
       @*/
-    public static /*@ pure @*/ native float intBitsToFloat(int bits);
+    public static /*@ pure @*/ float intBitsToFloat(int bits);
 
     /*@ public normal_behavior
       @   requires anotherFloat != null;
@@ -318,16 +318,16 @@ public /*@ pure @*/ final class Float extends Number implements Comparable {
       @*/
     public int compareTo(/*@ non_null @*/ Float anotherFloat);
 
-    /*@ also
-      @   public normal_behavior
-      @     requires o != null && (o instanceof Float);
-      @     ensures \result == compareTo((Float) o);
-      @  also
-      @   public exceptional_behavior
-      @     requires o == null || !(o instanceof Float);
-      @     signals_only ClassCastException;
-      @*/
-    public int compareTo(Object o);
+//    /*@ also
+//      @   public normal_behavior
+//      @     requires o != null && (o instanceof Float);
+//      @     ensures \result == compareTo((Float) o);
+//      @  also
+//      @   public exceptional_behavior
+//      @     requires o == null || !(o instanceof Float);
+//      @     signals_only ClassCastException;
+//      @*/
+//    public int compareTo(Object o);
 
     /*@ public normal_behavior
       @    assignable \nothing;

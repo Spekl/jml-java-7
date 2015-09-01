@@ -30,7 +30,7 @@ package java.lang;
 public /*@ pure @*/ final class Double extends Number implements Comparable {
     
     //@ public model double theDouble;
-    //@ represents theDouble <- doubleValue();
+    //@ represents theDouble = doubleValue();
 
     /** Returns true if the string is a parseable double value (but not
 	an infinite or NaN value).
@@ -74,9 +74,9 @@ public /*@ pure @*/ final class Double extends Number implements Comparable {
     public static final double MAX_VALUE;
     public static final double MIN_VALUE;
 
-    public static final Class TYPE;
-    //@ initially TYPE == \type(double);
-    //@ invariant_redundantly TYPE == double.class;
+    public static final Class<Double> TYPE;
+    //@ public initially TYPE == double.class;
+    //@ public invariant_redundantly TYPE == double.class;
 
     /*@ public normal_behavior
       @   ensures !isNaN(d) && !isInfinite(d) ==> parseable(\result);
@@ -205,7 +205,7 @@ public /*@ pure @*/ final class Double extends Number implements Comparable {
       @     requires obj != null && !(obj instanceof Double);
       @     ensures !\result;
       @*/
-    public boolean equals(/*@\readonly*//*@nullable*/Object obj);
+    public boolean equals(Object obj);
 
     /*@ public normal_behavior
       @ {|
@@ -228,7 +228,7 @@ public /*@ pure @*/ final class Double extends Number implements Comparable {
       @     requires !isNaN(value);
       @	ensures longBitsToDouble(\result) == value;
       @*/
-    public static /*@ pure @*/ native long doubleToLongBits(double value);
+    public static /*@ pure @*/ long doubleToLongBits(double value);
 
     /*@ public normal_behavior
       @ {|
@@ -253,7 +253,7 @@ public /*@ pure @*/ final class Double extends Number implements Comparable {
       @     requires !isNaN(value);
       @	ensures longBitsToDouble(\result) == value;
       @*/
-    public static /*@ pure @*/ native long doubleToRawLongBits(double value);
+    public static /*@ pure @*/ long doubleToRawLongBits(double value);
 
     /*@ public normal_behavior
       @  {|
@@ -273,7 +273,7 @@ public /*@ pure @*/ final class Double extends Number implements Comparable {
       @                the same bit pattern as bits *);
       @  |}
       @*/
-    public static /*@ pure @*/ native double longBitsToDouble(long bits);
+    public static /*@ pure @*/ double longBitsToDouble(long bits);
 
     /*@ public normal_behavior
       @     requires anotherDouble != null;
@@ -314,16 +314,16 @@ public /*@ pure @*/ final class Double extends Number implements Comparable {
       @*/
     public int compareTo(/*@ non_null @*/ Double anotherDouble);
 
-    /*@ also
-      @     public normal_behavior
-      @       requires o != null && (o instanceof Double);
-      @       ensures \result == compareTo((Double) o);
-      @   also
-      @     public exceptional_behavior
-      @       requires o == null || !(o instanceof Double);
-      @       signals_only ClassCastException;
-      @*/
-    public int compareTo(Object o);
+//    /*@ also
+//      @     public normal_behavior
+//      @       requires o != null && (o instanceof Double);
+//      @       ensures \result == compareTo((Double) o);
+//      @   also
+//      @     public exceptional_behavior
+//      @       requires o == null || !(o instanceof Double);
+//      @       signals_only ClassCastException;
+//      @*/
+//    public int compareTo(Object o);
     
     /*@ public normal_behavior
       @    assignable \nothing;

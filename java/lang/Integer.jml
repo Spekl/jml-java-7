@@ -50,16 +50,16 @@ public  /*@ pure @*/ final
     @*/
   //@   model public static pure boolean decodable( String nm );
           
-	//@ axiom (\forall int r; (\forall String s, ss; s.equals(ss) && parseable(s,r) && parseable(ss,r) ==> parseInt(s,r) == parseInt(ss,r)));
+	//-RAC-ESC@ axiom (\forall int r; (\forall String s, ss; s.equals(ss) && parseable(s,r) && parseable(ss,r) ==> parseInt(s,r) == parseInt(ss,r)));
 
     public static final int   MIN_VALUE;
-                               //@ initially MIN_VALUE == 0x80000000;
+                               //@ public initially MIN_VALUE == 0x80000000;
 
     public static final int   MAX_VALUE;
-                               //@ initially MAX_VALUE == 0x7FFFFFFF;
+                               //@ public initially MAX_VALUE == 0x7FFFFFFF;
 
-    public static final Class TYPE;
-                               //@ initially TYPE == \type(Integer);
+    public static final Class<Integer> TYPE;  // 1.5 DIFFERENCE
+                               //@ public initially TYPE == int.class; // 1.5 DIFFERENCE
 
     /*@ public normal_behavior
       @   requires (Character.MIN_RADIX <= radix
@@ -187,16 +187,20 @@ public  /*@ pure @*/ final
         throws NumberFormatException;
     
     /*@ public normal_behavior
-      @   requires parseable(s);
-      @   ensures \fresh(\result);
-      @   ensures \result.intValue() == parseInt(s,10);
-      @ also
-      @ public exceptional_behavior
-      @   requires !parseable(s);
-      @   signals_only NumberFormatException;
-      @*/
-    public static /*@ pure @*/ /*@ non_null @*/ Integer valueOf(String s)
-        throws NumberFormatException;
+    @   requires parseable(s);
+    @   ensures \result.intValue() == parseInt(s,10);
+    @ also
+    @ public exceptional_behavior
+    @   requires !parseable(s);
+    @   signals_only NumberFormatException;
+    @*/
+  public static /*@ pure @*/ /*@ non_null @*/ Integer valueOf(String s)
+      throws NumberFormatException;
+
+    /*@ public normal_behavior
+     @   ensures \result.intValue() == i;
+     @*/
+    public static /*@ pure @*/ /*@ non_null @*/ Integer valueOf(int i);
 
     /*@ public normal_behavior
       @   assignable theInteger;
@@ -288,7 +292,7 @@ public  /*@ pure @*/ final
       @     requires obj == null || !(obj instanceof Integer);
       @     ensures !\result;
       @*/
-    public boolean equals(/*@nullable*/Object obj);
+    public boolean equals(Object obj);
   
     /*@ public normal_behavior
       @   ensures (\result == null && getInteger(nm,null) == null) ||
@@ -350,18 +354,18 @@ public  /*@ pure @*/ final
       @*/
     public int compareTo(Integer anotherInteger);
             
-    /*@ also
-      @   public normal_behavior
-      @     requires o != null && (o instanceof Integer);
-      @     ensures \result == compareTo((Integer) o);
-      @ also
-      @   public exceptional_behavior
-      @     requires o != null && !(o instanceof Integer);
-      @     signals_only ClassCastException;
-      @ also public exceptional_behavior
-      @   requires o == null;
-      @   signals_only NullPointerException;
-      @*/
-    public int compareTo(Object o);
+//    /*@ also
+//      @   public normal_behavior
+//      @     requires o != null && (o instanceof Integer);
+//      @     ensures \result == compareTo((Integer) o);
+//      @ also
+//      @   public exceptional_behavior
+//      @     requires o != null && !(o instanceof Integer);
+//      @     signals_only ClassCastException;
+//      @ also public exceptional_behavior
+//      @   requires o == null;
+//      @   signals_only NullPointerException;
+//      @*/
+//    public int compareTo(Object o);
 
 }

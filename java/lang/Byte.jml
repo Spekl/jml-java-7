@@ -30,7 +30,7 @@ public /*@ pure @*/ final class Byte extends Number implements Comparable
 {
 
     //@ public model byte theByte;
-    //@ represents theByte <- byteValue();
+    //@ represents theByte = byteValue();
 
     /*@ 
       @     public normal_behavior
@@ -89,12 +89,11 @@ public /*@ pure @*/ final class Byte extends Number implements Comparable
       }
       @*/
 
-    public static final byte MIN_VALUE; //@ initially MIN_VALUE == -128;
-    public static final byte MAX_VALUE; //@ initially MAX_VALUE == 127;
+    public static final byte MIN_VALUE; //@ public initially MIN_VALUE == -128;
+    public static final byte MAX_VALUE; //@ public initially MAX_VALUE == 127;
 
-    public static /* non_null */ final Class TYPE;
-    //@ initially TYPE == \type(byte);
-    //@ invariant_redundantly TYPE == byte.class;
+    public static /* non_null */ final Class<Byte> TYPE;
+    //@ public initially TYPE == byte.class;
 
     /*@
       @ public normal_behavior
@@ -277,7 +276,7 @@ public /*@ pure @*/ final class Byte extends Number implements Comparable
       @     ensures !\result;
       @   |}
       @*/
-    public /*@ pure @*/ boolean equals(/*@\readonly*//*@nullable*/Object obj);
+    public /*@ pure @*/ boolean equals(Object obj);
 
     /*@ public normal_behavior
       @ {|
@@ -296,14 +295,14 @@ public /*@ pure @*/ final class Byte extends Number implements Comparable
       @*/
     public int compareTo(/*@ non_null */ Byte anotherByte);
 
-    /*@ also public normal_behavior
-      @   requires o instanceof Byte;
-      @   assignable \nothing;
-      @   ensures \result == compareTo((Byte) o);
-      @ also public exceptional_behavior
-      @   requires o != null && !(o instanceof Byte);
-      @   assignable \nothing;
-      @   signals_only ClassCastException;
-      @*/
-    public int compareTo(Object o);
+//    /*@ also public normal_behavior
+//      @   requires o instanceof Byte;
+//      @   assignable \nothing;
+//      @   ensures \result == compareTo((Byte) o);
+//      @ also public exceptional_behavior
+//      @   requires o != null && !(o instanceof Byte);
+//      @   assignable \nothing;
+//      @   signals_only ClassCastException;
+//      @*/
+//    public int compareTo(Object o);
 }

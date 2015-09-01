@@ -27,31 +27,31 @@ package java.lang;
  */
 public interface CharSequence {
     //@ public instance model non_null char[] charArray;
-    //@ public invariant charArray.owner == this;
+    //@ public instance invariant charArray.owner == this;
 
     /*@ public normal_behavior
       @   ensures \result <==> ( charArray != null && charArray.owner == this);
-      @ public pure model boolean initialCharSequence();
+      @ public pure helper model boolean initialCharSequence();
       @*/
 
     /*@ public normal_behavior
         ensures \result == ( a == b || (a != null && b != null &&
                       a.length == b.length && 
                       equal(a,0,b,0,a.length) ));
-        public static pure model boolean equal(char[] a, char[] b);
+        public static pure helper model boolean equal(char[] a, char[] b);
      */
     /*@ public normal_behavior
         requires a != null && b!= null && astart >= 0 && bstart >= 0 &&
-                 length >= 0 &&
-                 astart+length <= a.length && bstart + length <= b.length;
+                 len >= 0 &&
+                 astart+len <= a.length && bstart + len <= b.length;
         ensures \result == ((a==b && astart == bstart) ||
-                      (\forall int i; 0<=i && i<length; a[i+astart] == b[i+bstart])); 
-        public static pure model boolean equal(char[] a, int astart, char[] b, int bstart, int length);
+                      (\forall int i; 0<=i && i<len; a[i+astart] == b[i+bstart])); 
+        public static pure helper model boolean equal(char[] a, int astart, char[] b, int bstart, int len);
      */
 
-    //@ axiom (\forall char[] a;; equal(a,a));
-    //@ axiom (\forall char[] a,b;; equal(a,b) <==> equal(b,a));
-    //@ axiom (\forall char[] a,b,c;; (equal(a,b) && equal(b,c))==>equal(a,c)); 
+    //@ axiom (\forall char[] a; a!=null ; equal(a,a));
+    //@ axiom (\forall char[] a,b; a!=null && b !=null; equal(a,b) <==> equal(b,a));
+    //@ axiom (\forall char[] a,b,c; a!=null && b !=null && c != null; (equal(a,b) && equal(b,c))==>equal(a,c)); 
 
     //@ public normal_behavior
     //@      ensures \result >= 0;
@@ -94,9 +94,10 @@ public interface CharSequence {
       @*/
     public String toString();
 
-    /** According to the javadocs, the equals method should not be called. */
-    public boolean equals(Object obj);
-
-    /** According to the javadocs, the hashCode method should not be called. */
-    public int hashCode();
+// FIXME - need to permit interfaces to declare Object methods that are not implemented in the interface
+//    /** According to the javadocs, the equals method should not be called. */
+//    public boolean equals(Object obj);
+//
+//    /** According to the javadocs, the hashCode method should not be called. */
+//    public int hashCode();
 }

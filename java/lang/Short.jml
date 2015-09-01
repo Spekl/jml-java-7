@@ -30,7 +30,7 @@ public /*@ pure @*/ final
     class Short extends Number implements Comparable {
 
 	//@ public model short theShort;
-	//@ represents theShort <- shortValue();
+	//@ represents theShort = shortValue();
 
 	/*@
 	  @	public normal_behavior
@@ -91,9 +91,9 @@ public /*@ pure @*/ final
 	public static final short   MIN_VALUE;
 	public static final short   MAX_VALUE;
 
-	public static final Class   TYPE;
-	//@ initially TYPE == \type(short);
-	//@ invariant_redundantly TYPE == short.class;
+	public static final Class<Short>   TYPE;
+	//@ public initially TYPE == short.class;
+	//@ public invariant_redundantly TYPE == short.class;
 
 	/*@
 	  @ public normal_behavior
@@ -251,7 +251,7 @@ public /*@ pure @*/ final
 	  @     requires obj == null || !(obj instanceof Short);
 	  @     ensures !\result;
 	  @*/
-	public boolean equals(/*@\readonly*//*@nullable*/Object obj) ;
+	public boolean equals(Object obj) ;
 
 	/*@ public normal_behavior
 	  @ {|
@@ -267,15 +267,15 @@ public /*@ pure @*/ final
 	  @*/
 	public int compareTo(/*@ non_null @*/ Short anotherShort) ;
 
-	/*@ also
-	  @     public normal_behavior
-	  @       requires o != null && (o instanceof Short);
-	  @       ensures \result == compareTo((Short) o);
-	  @   also
-	  @     public exceptional_behavior
-	  @       requires o == null && !(o instanceof Short);
-	  @       signals(ClassCastException);
-	  @*/
-	public int compareTo(Object o) throws ClassCastException;
+//	/*@ also
+//	  @     public normal_behavior
+//	  @       requires o != null && (o instanceof Short);
+//	  @       ensures \result == compareTo((Short) o);
+//	  @   also
+//	  @     public exceptional_behavior
+//	  @       requires o == null && !(o instanceof Short);
+//	  @       signals(ClassCastException);
+//	  @*/
+//	public int compareTo(Object o) throws ClassCastException;
 
     }

@@ -1,5 +1,3 @@
-// @(#)$Id$
-
 // Copyright (C) 2002 Iowa State University
 
 // This file is part of JML
@@ -26,7 +24,7 @@ package java.util;
  * @author Gary T. Leavens
  * @author David R. Cok
  */
-public interface Map {
+public interface Map<K,V> {
     /*@ public normal_behavior
       @   ensures \result == ( o == oo ||
       @        ( o != null && oo != null && o.equals(oo)));
@@ -94,41 +92,30 @@ public interface Map {
     /*@ model pure public boolean initialMap();
       @*/
 
-    public static interface Entry {
+    public static interface Entry<K,V> {
 
-        //@ public model instance Object abstractKey;
-        //@ public model instance Object abstractValue;
+        //@ public model instance K abstractKey;
+        //@ public model instance V abstractValue;
 		
         /*@  public normal_behavior
           @     ensures \result == abstractKey;
           @*/
-        /*@ pure @*/ Object getKey();
+        /*@ pure @*/ K getKey();
 
         /*@  public normal_behavior
           @     ensures \result == abstractValue;
           @*/
-        /*@ pure @*/ Object getValue();
+        /*@ pure @*/ V getValue();
 		
         /*@ public behavior
           @     assignable this.abstractValue;
           @     ensures \result == \old(this.abstractValue);
           @     ensures this.abstractValue == value;
           @
-          @   // FIXME - fix these exceptions
           @     signals_only NullPointerException, UnsupportedOperationException,
                                ClassCastException, IllegalArgumentException;
-          @     signals (NullPointerException) \not_modified(this.abstractValue);
-          @     signals (UnsupportedOperationException)
-          @               \not_modified(this.abstractValue) 
-          @             && (* if the map's put operation is not supported  *);
-          @     signals (ClassCastException) \not_modified(this.abstractValue)
-          @             && (* \typeof(abstractValue) is incompatible
-          @                with the valueType of this map *);
-          @     signals (IllegalArgumentException) \not_modified(this.abstractValue)
-          @             && (* if some aspect of value is not 
-          @                allowed in the map *);
           @*/
-        Object setValue(Object value);
+        V setValue(V value);
 
         /*@  also
           @   public normal_behavior
@@ -141,7 +128,7 @@ public interface Map {
           @     requires !(o instanceof Entry);
           @     ensures \result == false;
           @*/
-        /*@ pure @*/ boolean equals(/*@ nullable \readonly @*/ Object o);
+        /*@ pure @*/ boolean equals(Object o);
 
         /*@ pure @*/ int hashCode();
 
@@ -179,7 +166,6 @@ public interface Map {
       @    ensures content.hasMap(key) <==> \result;
       @
       @    signals_only ClassCastException, NullPointerException;
-           // FIXME - fix exceptions
       @    signals (ClassCastException)
       @         (* if the value is not appropriate for this object *);
       @    signals (NullPointerException) key == null
@@ -193,7 +179,6 @@ public interface Map {
               nullequals(value,content.mapsObject(null)) ||
               (\exists Object k; nullequals(value,content.mapsObject(k))));
       @
-           // FIXME - fix exceptions
       @    signals_only ClassCastException, NullPointerException;
       @    signals (ClassCastException)
       @         (* if the value is not appropriate for this object *);
@@ -214,7 +199,7 @@ public interface Map {
 
            // FIXME - exceptions?
       @*/
-    /*@ pure @*/ Object get(Object key);
+    /*@ pure @*/ V get(Object key);
 
     /*-@ public behavior
       @    assignable objectState;
@@ -224,7 +209,7 @@ public interface Map {
       @    ensures content.maps(key) == value;
       @    ensures \result == \old(get(key));
 
-      @    ensures (\forall Object k; k != key ==> 
+      @    ensures (\forall Object k; !k.equals(key) ==> 
                         (\old(content.hasMapObject(k)) 
                                        == content.hasMapObject(k)));
       @    ensures key != null ==> (\old(content.hasMapObject(null)) 
@@ -255,12 +240,12 @@ public interface Map {
       @             && (* if the map's put operation is not supported  *);
       @    signals (ClassCastException) \not_modified(theMap)
       @             && (* \typeof(key) or \typeof(value) is incompatible
-      @                with the valueType or keyType of this map *);
+      @                with the corresponding V or K type *);
       @    signals (IllegalArgumentException) \not_modified(theMap)
       @             && (* if some aspect of key or value is not 
       @                allowed in the map *);
       @*/
-    Object put(Object key, Object value);
+    V put(K key, V value);
 
     /*-@ public behavior
       @    assignable objectState;
@@ -283,7 +268,7 @@ public interface Map {
       @    signals (NullPointerException) key == null
       @              && (* if this map doesn't support null keys *);
       @*/
-    Object remove(Object key);
+    V remove(Object key);
 
     /*@ public behavior
            requires t != null;
@@ -312,7 +297,7 @@ public interface Map {
       @             && (* if some aspect of a key or value is not 
       @                allowed in the map *);
       @*/
-    void putAll(Map t);
+    void putAll(Map<? extends K, ? extends V> t);
 
     /*-@ public normal_behavior
       @    assignable objectState;
@@ -325,19 +310,19 @@ public interface Map {
       @    ensures \result != null;
            // FIXME
       @*/
-    /*@ pure @*/ Set keySet();
+    /*@ pure @*/ Set<K> keySet();
 
     /*@ public normal_behavior 
       @    ensures \result != null;
            // FIXME
       @*/
-    /*@ pure @*/ Collection values();
+    /*@ pure @*/ Collection<V> values();
 
     /*@ public normal_behavior
       @    ensures \result != null; 
            // FIXME
       @*/
-    /*@ pure @*/ Set entrySet();
+    /*@ pure @*/ Set<Entry<K,V>> entrySet();
 
     /*@
       @ also

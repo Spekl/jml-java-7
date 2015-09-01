@@ -52,7 +52,7 @@ public class Arrays {
 
     /*@  public normal_behavior
       @   requires a != null;
-      @   assignable a[fromIndex..toIndex-1];
+      @   assignable a[fromIndex .. toIndex-1];
       @   ensures_redundantly a.length == \old(a.length) && a != null;
       @   ensures (\forall int i;
       @            fromIndex < i && i < toIndex;
@@ -104,7 +104,7 @@ public class Arrays {
     /*@  public normal_behavior
       @   requires a != null;
       @   requires 0 <= fromIndex && fromIndex <= toIndex && toIndex < a.length;
-      @   assignable a[fromIndex..toIndex-1];
+      @   assignable a[fromIndex .. toIndex-1];
       @   ensures (\forall int i; fromIndex < i && i < toIndex;
       @             a[i-1] <= a[i]);
       @   ensures (\forall int i;
@@ -153,7 +153,7 @@ public class Arrays {
 
     /*@  public normal_behavior
       @   requires a != null;
-      @   assignable a[fromIndex..toIndex-1];
+      @   assignable a[fromIndex .. toIndex-1];
       @   ensures_redundantly (\forall int i;
       @            0 <= i && i < fromIndex  
       @            || toIndex <= i && i < a.length; 
@@ -205,7 +205,7 @@ public class Arrays {
 
     /*@  public normal_behavior
       @   requires a != null;
-      @   assignable a[fromIndex..toIndex-1];
+      @   assignable a[fromIndex .. toIndex-1];
       @   ensures_redundantly (\forall int i;
       @            0 <= i && i < fromIndex  
       @            || toIndex <= i && i < a.length; 
@@ -257,7 +257,7 @@ public class Arrays {
 
     /*@  public normal_behavior
       @   requires a != null;
-      @   assignable a[fromIndex..toIndex-1];
+      @   assignable a[fromIndex .. toIndex-1];
       @   ensures_redundantly (\forall int i;
       @            0 <= i && i < fromIndex  
       @            || toIndex <= i && i < a.length; 
@@ -312,7 +312,7 @@ public class Arrays {
 
     /*@  public normal_behavior
       @   requires a != null;
-      @   assignable a[fromIndex..toIndex-1];
+      @   assignable a[fromIndex .. toIndex-1];
       @   ensures_redundantly (\forall int i;
       @            0 <= i && i < fromIndex  
       @            || toIndex <= i && i < a.length; 
@@ -367,7 +367,7 @@ public class Arrays {
 
     /*@  public normal_behavior
       @   requires a != null;
-      @   assignable a[fromIndex..toIndex-1];
+      @   assignable a[fromIndex .. toIndex-1];
       @   ensures_redundantly (\forall int i;
       @            0 <= i && i < fromIndex  
       @            || toIndex <= i && i < a.length; 
@@ -401,36 +401,27 @@ public class Arrays {
     /*@  public normal_behavior
       @   requires a != null;
       @   requires (\forall int i; 0 <= i && i < a.length; 
-      @             a[i] instanceof Comparable);
+      @             \typeof(a[i]) <: \type(Comparable<Object>));
       @   assignable a[*];
       @   ensures_redundantly a.length == \old(a.length) && a != null;
       @   ensures (\forall int i;
       @            0 < i && i < a.length;
-      @            ((Comparable)a[i-1]).compareTo(a[i]) <= 0);
+      @            ((Comparable<Object>)a[i-1]).compareTo(a[i]) <= 0);
       @   ensures (\forall int i;
       @            0 <= i && i < a.length;
       @            (\num_of int j; 0 <= j && j < a.length; 
-      @             ((Comparable)a[j]).compareTo(a[i]) == 0)
+      @             ((Comparable<Object>)a[j]).compareTo(a[i]) == 0)
       @            == 
       @            (\num_of int k; 0 <= k && k < \old(a.length);
-      @             \old((Comparable)a[k]).compareTo(a[i]) == 0));
-      @ also
-      @  public exceptional_behavior
-      @   requires a == null ||
-      @     (* array contains elements not mutually comparable *);
-      @   assignable \nothing;
-      @   signals_only NullPointerException, ClassCastException;
-      @   signals (NullPointerException) a == null;
-      @   signals (ClassCastException)
-      @     (* array contains elements not mutually comparable *);
+      @             \old((Comparable<Object>)a[k]).compareTo(a[i]) == 0));
       @*/
     public static void sort(Object[] a);
 
     /*@  public normal_behavior
       @   requires a != null;
       @   requires (\forall int i; 0 <= i && i < a.length; 
-      @              a[i] instanceof Comparable);
-      @   assignable a[fromIndex..toIndex-1];
+      @              \typeof(a[i]) <: \type(Comparable<Object>));
+      @   assignable a[fromIndex .. toIndex-1];
       @   ensures_redundantly (\forall int i;
       @            0 <= i && i < fromIndex  
       @            || toIndex <= i && i < a.length; 
@@ -438,14 +429,14 @@ public class Arrays {
       @   ensures_redundantly a.length == \old(a.length) && a != null;
       @   ensures (\forall int i;
       @            fromIndex < i && i < toIndex;
-      @            ((Comparable)a[i-1]).compareTo(a[i]) <= 0);
+      @            ((Comparable<Object>)a[i-1]).compareTo(a[i]) <= 0);
       @   ensures (\forall int i;
       @            0 <= i && i < a.length;
       @            (\num_of int j; 0 <= j && j < a.length; 
-      @             ((Comparable)a[j]).compareTo(a[i]) == 0)
+      @             ((Comparable<Object>)a[j]).compareTo(a[i]) == 0)
       @            == 
       @            (\num_of int k; 0 <= k && k < \old(a.length);
-      @             \old((Comparable)a[k]).compareTo(a[i]) == 0));
+      @             \old((Comparable<Object>)a[k]).compareTo(a[i]) == 0));
       @ also
       @  public exceptional_behavior
       @   requires a == null || fromIndex > toIndex ||
@@ -481,19 +472,19 @@ public class Arrays {
       @  public normal_behavior
       @   requires a != null && c == null;
       @   requires (\forall int i; 0 <= i && i < a.length; 
-      @             a[i] instanceof Comparable);
+      @             \typeof(a[i]) <: \type(Comparable<T>));
       @   assignable a[*];
       @   ensures_redundantly a.length == \old(a.length) && a != null;
       @   ensures (\forall int i;
       @            0 < i && i < a.length;
-      @            ((Comparable)a[i-1]).compareTo(a[i]) <= 0);
+      @            ((Comparable<T>)a[i-1]).compareTo(a[i]) <= 0);
       @   ensures (\forall int i;
       @            0 <= i && i < a.length;
       @            (\num_of int j; 0 <= j && j < a.length; 
-      @             ((Comparable)a[j]).compareTo(a[i]) == 0)
+      @             ((Comparable<T>)a[j]).compareTo(a[i]) == 0)
       @            == 
       @            (\num_of int k; 0 <= k && k < \old(a.length);
-      @             \old((Comparable)a[k]).compareTo(a[i]) == 0));
+      @             \old((Comparable<T>)a[k]).compareTo(a[i]) == 0));
       @ also
       @  public exceptional_behavior
       @   requires a == null || 
@@ -504,11 +495,11 @@ public class Arrays {
       @   signals (ClassCastException)
       @     (* array contains elements not mutually comparable *);
       @*/
-    public static void sort(Object[] a, /*@nullable*/ Comparator c);
+    public static <T>void sort(T[] a, /*@nullable*/ Comparator<? super T> c);
 
     /*@  public normal_behavior
       @   requires a != null && c != null;
-      @   assignable a[fromIndex..toIndex-1];
+      @   assignable a[fromIndex .. toIndex-1];
       @   ensures_redundantly (\forall int i;
       @            0 <= i && i < fromIndex  
       @            || toIndex <= i && i < a.length; 
@@ -528,8 +519,8 @@ public class Arrays {
       @  public normal_behavior
       @   requires a != null && c == null;
       @   requires (\forall int i; 0 <= i && i < a.length; 
-      @             a[i] instanceof Comparable);
-      @   assignable a[fromIndex..toIndex-1];
+      @             \typeof(a[i]) <: \type(Comparable<T>));
+      @   assignable a[fromIndex .. toIndex-1];
       @   ensures_redundantly (\forall int i;
       @            0 <= i && i < fromIndex  
       @            || toIndex <= i && i < a.length; 
@@ -537,14 +528,14 @@ public class Arrays {
       @   ensures_redundantly a.length == \old(a.length) && a != null;
       @   ensures (\forall int i;
       @            fromIndex < i && i < toIndex;
-      @            ((Comparable)a[i-1]).compareTo(a[i]) <= 0);
+      @            ((Comparable<T>)a[i-1]).compareTo(a[i]) <= 0);
       @   ensures (\forall int i;
       @            0 <= i && i < a.length;
       @            (\num_of int j; 0 <= j && j < a.length; 
-      @             ((Comparable)a[j]).compareTo(a[i]) == 0)
+      @             ((Comparable<T>)a[j]).compareTo(a[i]) == 0)
       @            == 
       @            (\num_of int k; 0 <= k && k < \old(a.length);
-      @             \old((Comparable)a[k]).compareTo(a[i]) == 0));
+      @             \old((Comparable<T>)a[k]).compareTo(a[i]) == 0));
       @ also
       @  public exceptional_behavior
       @   requires a == null || fromIndex > toIndex ||
@@ -560,7 +551,7 @@ public class Arrays {
       @   signals (ArrayIndexOutOfBoundsException) 
       @            fromIndex < 0 || toIndex > a.length;
       @*/
-    public static void sort(Object[] a, int fromIndex, int toIndex, /*@nullable*/ Comparator c);
+    public static <T> void sort(T[] a, int fromIndex, int toIndex, /*@nullable*/ Comparator<? super T> c);
 
     //------------------------------------------------------------------------
 
@@ -801,31 +792,31 @@ public class Arrays {
     /*@  public normal_behavior
       @   requires a != null; 
       @   requires (\forall int i; 0 <= i && i < a.length; 
-      @             a[i] instanceof Comparable) && 
-      @             key instanceof Comparable;
+      @             \typeof(a[i]) <: \type(Comparable<Object>)) && 
+      @             \typeof(key) <: \type(Comparable<Object>);
       @   requires (\forall int i;
       @             0 < i && i < a.length;
-      @             ((Comparable)a[i-1]).compareTo(a[i]) <= 0);
+      @             ((Comparable<Object>)a[i-1]).compareTo(a[i]) <= 0);
       @   {| 
       @      requires (\exists int j; 0 <= j && j < a.length; 
-      @                ((Comparable)a[j]).compareTo(key) == 0);
+      @                ((Comparable<Object>)a[j]).compareTo(key) == 0);
       @      assignable \nothing;
       @      ensures 0 <= \result && \result < a.length 
-      @              && ((Comparable)a[\result]).compareTo(key) == 0;
+      @              && ((Comparable<Object>)a[\result]).compareTo(key) == 0;
       @     also
       @      requires !(\exists int j; 0 <= j && j < a.length; 
-      @                ((Comparable)a[j]).compareTo(key) == 0);
+      @                ((Comparable<Object>)a[j]).compareTo(key) == 0);
       @      assignable \nothing;
       @      ensures \result < 0;
       @      ensures (\exists int j; 0 <= j && j < a.length; 
-      @               ((Comparable)a[j]).compareTo(key) < 0)
-      @       ==> ((Comparable)a[(\result*-1) - 2]).compareTo(key) < 0;
+      @               ((Comparable<Object>)a[j]).compareTo(key) < 0)
+      @       ==> ((Comparable<Object>)a[(\result*-1) - 2]).compareTo(key) < 0;
       @      ensures ((\result*-1)-1 < a.length && 
-      @              ((Comparable)a[(\result*-1)-1]).compareTo(key) > 0)
+      @              ((Comparable<Object>)a[(\result*-1)-1]).compareTo(key) > 0)
       @               || (\result*-1)-1 == a.length; 
       @      ensures_redundantly (\exists int j; 0 <= j && j < a.length;
-      @               ((Comparable)a[j]).compareTo(key) > 0)
-      @       ==> ((Comparable)a[(\result*-1)-1]).compareTo(key) > 0;
+      @               ((Comparable<Object>)a[j]).compareTo(key) > 0)
+      @       ==> ((Comparable<Object>)a[(\result*-1)-1]).compareTo(key) > 0;
       @    |}
       @ also
       @  public exceptional_behavior
@@ -839,73 +830,74 @@ public class Arrays {
       @*/
     public static int binarySearch(Object[] a, Object key);
 
-    /*@  public normal_behavior
-      @   requires a != null && c != null;
-      @   requires (\forall int i; 0 < i && i < a.length;
-      @             c.compare(a[i-1],a[i]) <= 0);
-      @   {| 
-      @      requires (\exists int j; 0 <= j && j < a.length; 
-      @                c.compare(a[j],key) == 0);
-      @      assignable \nothing;
-      @      ensures 0 <= \result && \result < a.length 
-      @              && c.compare(a[\result],key) == 0;
-      @     also
-      @      requires !(\exists int j; 0 <= j && j < a.length; 
-      @                 c.compare(a[j],key) == 0);
-      @      assignable \nothing;
-      @      ensures \result < 0;
-      @      ensures (\exists int j; 0 <= j && j < a.length; 
-      @               c.compare(a[j],key) < 0)
-      @           ==> c.compare(a[(\result*-1) - 2],key) < 0;
-      @      ensures ((\result*-1)-1 < a.length && 
-      @               c.compare(a[(\result*-1)-1],key) > 0) 
-      @               || (\result*-1)-1 == a.length; 
-      @      ensures_redundantly (\exists int j; 0 <= j && j < a.length;
-      @               c.compare(a[j],key) > 0)
-      @           ==> c.compare(a[(\result*-1)-1],key) > 0;
-      @    |}
-      @ also
-      @  public normal_behavior
-      @   requires a != null && c == null;
-      @   requires (\forall int i; 0 <= i && i < a.length; 
-      @             a[i] instanceof Comparable) && 
-      @             key instanceof Comparable;
-      @   requires (\forall int i;
-      @             0 < i && i < a.length;
-      @             ((Comparable)a[i-1]).compareTo(a[i]) <= 0);
-      @   {| 
-      @      requires (\exists int j; 0 <= j && j < a.length;
-      @               ((Comparable)a[j]).compareTo(key) == 0);
-      @      assignable \nothing;
-      @      ensures 0 <= \result && \result < a.length 
-      @              && ((Comparable)a[\result]).compareTo(key) == 0;
-      @     also
-      @      requires !(\exists int j; 0 <= j && j < a.length; 
-      @                ((Comparable)a[j]).compareTo(key) == 0);
-      @      assignable \nothing;
-      @      ensures \result < 0;
-      @      ensures (\exists int j; 0 <= j && j < a.length; 
-      @               ((Comparable)a[j]).compareTo(key) < 0)
-      @       ==> ((Comparable)a[(\result*-1) - 2]).compareTo(key) < 0;
-      @      ensures ((\result*-1)-1 < a.length && 
-      @              ((Comparable)a[(\result*-1)-1]).compareTo(key) > 0) 
-      @               || (\result*-1)-1 == a.length; 
-      @      ensures_redundantly (\exists int j; 0 <= j && j < a.length;
-      @               ((Comparable)a[j]).compareTo(key) > 0)
-      @        ==> ((Comparable)a[(\result*-1)-1]).compareTo(key) > 0;
-      @    |}
-      @ also
-      @  public exceptional_behavior
-      @   requires a == null ||
-      @            (* array contains elements not comparable to key *);
-      @   assignable \nothing;
-      @   signals_only NullPointerException, ClassCastException;
-      @   signals (NullPointerException) a == null;
-      @   signals (ClassCastException) 
-      @            (* array contains elements not comparable to key *);
-      @*/
-    public static int binarySearch(Object[] a, Object key, /*@nullable*/ Comparator c);
-
+//    /*@  public normal_behavior
+//      @   requires a != null && c != null;
+//      @   requires (\forall int i; 0 < i && i < a.length;
+//      @             c.compare(a[i-1],a[i]) <= 0);
+//      @   {| 
+//      @      requires (\exists int j; 0 <= j && j < a.length; 
+//      @                c.compare(a[j],key) == 0);
+//      @      assignable \nothing;
+//      @      ensures 0 <= \result && \result < a.length 
+//      @              && c.compare(a[\result],key) == 0;
+//      @     also
+//      @      requires !(\exists int j; 0 <= j && j < a.length; 
+//      @                 c.compare(a[j],key) == 0);
+//      @      assignable \nothing;
+//      @      ensures \result < 0;
+//      @      ensures (\exists int j; 0 <= j && j < a.length; 
+//      @               c.compare(a[j],key) < 0)
+//      @           ==> c.compare(a[(\result*-1) - 2],key) < 0;
+//      @      ensures ((\result*-1)-1 < a.length && 
+//      @               c.compare(a[(\result*-1)-1],key) > 0) 
+//      @               || (\result*-1)-1 == a.length; 
+//      @      ensures_redundantly (\exists int j; 0 <= j && j < a.length;
+//      @               c.compare(a[j],key) > 0)
+//      @           ==> c.compare(a[(\result*-1)-1],key) > 0;
+//      @    |}
+//      @ also
+//      @  public normal_behavior
+//      @   requires a != null && c == null;
+//      @   requires (\forall int i; 0 <= i && i < a.length; 
+//      @             \typeof(a[i]) <: \type(Comparable<T>)) && 
+//      @             \typeof(key) <: \type(Comparable<T>));
+//      @   requires (\forall int i;
+//      @             0 < i && i < a.length;
+//      @             ((Comparable<T>)a[i-1]).compareTo(a[i]) <= 0);
+//      @   {| 
+//      @      requires (\exists int j; 0 <= j && j < a.length;
+//      @               ((Comparable<T>)a[j]).compareTo(key) == 0);
+//      @      assignable \nothing;
+//      @      ensures 0 <= \result && \result < a.length 
+//      @              && ((Comparable<T>)a[\result]).compareTo(key) == 0;
+//      @     also
+//      @      requires !(\exists int j; 0 <= j && j < a.length; 
+//      @                ((Comparable<T>)a[j]).compareTo(key) == 0);
+//      @      assignable \nothing;
+//      @      ensures \result < 0;
+//      @      ensures (\exists int j; 0 <= j && j < a.length; 
+//      @               ((Comparable<T>)a[j]).compareTo(key) < 0)
+//      @       ==> ((Comparable<T>)a[(\result*-1) - 2]).compareTo(key) < 0;
+//      @      ensures ((\result*-1)-1 < a.length && 
+//      @              ((Comparable<T>)a[(\result*-1)-1]).compareTo(key) > 0) 
+//      @               || (\result*-1)-1 == a.length; 
+//      @      ensures_redundantly (\exists int j; 0 <= j && j < a.length;
+//      @               ((Comparable<T>)a[j]).compareTo(key) > 0)
+//      @        ==> ((Comparable<T>)a[(\result*-1)-1]).compareTo(key) > 0;
+//      @    |}
+//      @ also
+//      @  public exceptional_behavior
+//      @   requires a == null ||
+//      @            (* array contains elements not comparable to key *);
+//      @   assignable \nothing;
+//      @   signals_only NullPointerException, ClassCastException;
+//      @   signals (NullPointerException) a == null;
+//      @   signals (ClassCastException) 
+//      @            (* array contains elements not comparable to key *);
+//      @*/
+//    public static <T> int binarySearch(T[] a, T key, /*@nullable*/ Comparator<? extends T> c);
+// FIXME - don't handle matching of generic methods yet
+    
     /*@  public normal_behavior
       @   requires a == null || a2 == null;
       @   ensures \result <==> a == a2;
@@ -1046,7 +1038,7 @@ public class Arrays {
 // FIXME - check this
     /*@  public normal_behavior
       @   requires a != null && fromIndex < toIndex;
-      @   assignable a[fromIndex..toIndex-1];
+      @   assignable a[fromIndex .. toIndex-1];
       @   ensures_redundantly a.length == \old(a.length) && a != null;
       @   ensures (\forall int i; fromIndex <= i && i < toIndex; 
       @            a[i] == val);
@@ -1096,7 +1088,7 @@ public class Arrays {
 // CHECK THIS - FIXME
     /*@  public normal_behavior
       @   requires a != null && fromIndex < toIndex;
-      @   assignable a[fromIndex..toIndex-1];
+      @   assignable a[fromIndex .. toIndex-1];
       @   ensures_redundantly a.length == \old(a.length) && a != null;
       @   ensures (\forall int i; fromIndex <= i && i < toIndex; 
       @            a[i] == val);
@@ -1146,7 +1138,7 @@ public class Arrays {
 // FIXME - checkthis
     /*@  public normal_behavior
       @   requires a != null && fromIndex < toIndex;
-      @   assignable a[fromIndex..toIndex-1];
+      @   assignable a[fromIndex .. toIndex-1];
       @   ensures_redundantly a.length == \old(a.length) && a != null;
       @   ensures (\forall int i; fromIndex <= i && i < toIndex; 
       @            a[i] == val);
@@ -1196,7 +1188,7 @@ public class Arrays {
 // FIXME - check this
     /*@  public normal_behavior
       @   requires a != null && fromIndex < toIndex;
-      @   assignable a[fromIndex..toIndex-1];
+      @   assignable a[fromIndex .. toIndex-1];
       @   ensures_redundantly a.length == \old(a.length) && a != null;
       @   ensures (\forall int i; fromIndex <= i && i < toIndex; 
       @            a[i] == val);
@@ -1246,7 +1238,7 @@ public class Arrays {
 // FIXME - check this
     /*@  public normal_behavior
       @   requires a != null && fromIndex < toIndex;
-      @   assignable a[fromIndex..toIndex-1];
+      @   assignable a[fromIndex .. toIndex-1];
       @   ensures_redundantly a.length == \old(a.length) && a != null;
       @   ensures (\forall int i; fromIndex <= i && i < toIndex; 
       @            a[i] == val);
@@ -1296,7 +1288,7 @@ public class Arrays {
 // CHECK THIS = FIXME
     /*@  public normal_behavior
       @   requires a != null && fromIndex < toIndex;
-      @   assignable a[fromIndex..toIndex-1];
+      @   assignable a[fromIndex .. toIndex-1];
       @   ensures_redundantly a.length == \old(a.length) && a != null;
       @   ensures (\forall int i; fromIndex <= i && i < toIndex; 
       @            a[i] == val);
@@ -1527,17 +1519,20 @@ public class Arrays {
 
     //-----------------------------------------------------------------------
 
-    /*@  public normal_behavior
-      @   requires a != null;
-      @   ensures \result.content.theSize == a.length; */
-    /*-@  ensures (\forall int i; 0<=i && i<a.length;
-      @			List.get(\result.content,i) == a[i]); */
-    /*@ also public exceptional_behavior
-      @   requires a == null;
-      @   signals_only NullPointerException;
-      @*/
-    //@ pure
-    public static /*@ non_null @*/ List asList(/*@ nullable @*/Object[] a) throws NullPointerException;
+    // FIXME - this is commented out because it provokes a non-suppressable varargs warning
+    // Put it back once that warning is resolved.
+//    /*@  public normal_behavior
+//      @   requires a != null;
+//      @   ensures \result.content.theSize == a.length; */
+//    /*-@  ensures (\forall int i; 0<=i && i<a.length;
+//      @			List.get(\result.content,i) == a[i]); */
+//    /*@ also public exceptional_behavior
+//      @   requires a == null;
+//      @   signals_only NullPointerException;
+//      @*/
+//    //@ pure
+//    @SuppressWarnings("varargs-unchecked")
+//    public static /*@ non_null @*/ <T> List<T> asList(/*@ nullable @*/T[] a) throws NullPointerException;
 
     //-----------------------------------------------------------------------
 
@@ -1547,14 +1542,14 @@ public class Arrays {
           ensures \result <==> (\exists int i; 0<=i && i<array.length; 
                                                         array[i] == o);
         //-@ function
-        static pure public model boolean contains(Object[] array, Object o);
+        static pure public model <T> boolean contains(T[] array, Object o);
 
         public normal_behavior
           requires array != null;
           requires len <= array.length;
-          ensures \result <==> (\exists int i; 0<=i && i<len; array[i] == o);
+          ensures \result <==> (\exists int i; 0<=i && i<(int)len; array[i] == o); // FIXME - when math modes are supported we can allow i to be \bigint
         //-@ function
-        static pure public model boolean contains(Object[] array, \bigint len, 
+        static pure public model <T> boolean contains(T[] array, \bigint len, 
                                                                    Object o);
 
         public normal_behavior
@@ -1605,17 +1600,18 @@ public class Arrays {
         //-@ function
         static pure public model boolean contains(double[] array, double o);
 
-        public normal_behavior
-          requires array != null;
-          ensures (\exists int i; 0<=i && i<array.length; array[i] == o);
-        //-@ function
-        static pure public model boolean contains(\bigint[] array, \bigint o);
+// FIXME _ need to implement bigint and real
+//        public normal_behavior
+//          requires array != null;
+//          ensures (\exists int i; 0<=i && i<array.length; array[i] == o);
+//        //-@ function
+//        static pure public model boolean contains(\bigint[] array, \bigint o);
 
-        public normal_behavior
-          requires array != null;
-          ensures (\exists int i; 0<=i && i<array.length; array[i] == o);
-        //-@ function
-        static pure public model boolean contains(\real[] array, \real o);
+//        public normal_behavior
+//          requires array != null;
+//          ensures (\exists int i; 0<=i && i<array.length; array[i] == o);
+//        //-@ function
+//        static pure public model boolean contains(\real[] array, \real o);
      */
 }
 

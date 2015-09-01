@@ -25,7 +25,7 @@ package java.lang;
  * @author David Cok
  * @author Gary T. Leavens
  */
-final public class StringBuffer implements java.io.Serializable, CharSequence {
+final public class StringBuffer extends AbstractStringBuilder implements java.io.Serializable, CharSequence {
 
 // FIXME - should we use charArray instead of accumulatedString?
 
@@ -56,14 +56,14 @@ final public class StringBuffer implements java.io.Serializable, CharSequence {
       @*/
     public synchronized StringBuffer append(char c);
 
-    /*@ public normal_behavior
+    /*-RAC@ public normal_behavior
       @   assignable accumulatedString;
       @   ensures accumulatedString.equals(\old(String.concat(accumulatedString,String.valueOf(b))));
       @   ensures \result == this;
       @*/
     public synchronized StringBuffer append(boolean b);
 
-    /*@ public normal_behavior
+    /*-RAC@ public normal_behavior
       @   requires s != null;
       @   assignable accumulatedString;
       @   ensures accumulatedString
@@ -79,7 +79,7 @@ final public class StringBuffer implements java.io.Serializable, CharSequence {
       @*/
     public synchronized StringBuffer append(String s);
 
-    /*@   public normal_behavior
+    /*-RAC@   public normal_behavior
       @     requires o != null;
       @     assignable accumulatedString;
       @     ensures accumulatedString
@@ -101,7 +101,7 @@ final public class StringBuffer implements java.io.Serializable, CharSequence {
       @*/
     public synchronized StringBuffer append(Object o);
 
-    /*@ public normal_behavior
+    /*-RAC@ public normal_behavior
       @   requires s != null;
       @   assignable accumulatedString;
       @   ensures accumulatedString
@@ -117,7 +117,7 @@ final public class StringBuffer implements java.io.Serializable, CharSequence {
       @*/
     public synchronized StringBuffer append(StringBuffer s);
 
-    /*@ public normal_behavior
+    /*-RAC@ public normal_behavior
       @   requires ca != null;
       @   assignable accumulatedString;
       @   ensures accumulatedString
@@ -127,28 +127,28 @@ final public class StringBuffer implements java.io.Serializable, CharSequence {
       @*/
     public synchronized StringBuffer append(char[] ca, int i, int j);
 
-    /*@ public normal_behavior
+    /*-RAC@ public normal_behavior
       @   assignable accumulatedString;
       @   ensures accumulatedString.equals(\old(String.concat(accumulatedString,String.valueOf(i))));
       @   ensures \result == this;
       @*/
     public synchronized StringBuffer append(int i);
 
-    /*@ public normal_behavior
+    /*-RAC@ public normal_behavior
       @   assignable accumulatedString;
       @   ensures accumulatedString.equals(\old(String.concat(accumulatedString,String.valueOf(f))));
       @   ensures \result == this;
       @*/
     public synchronized StringBuffer append(float f);
 
-    /*@ public normal_behavior
+    /*-RAC@ public normal_behavior
       @   assignable accumulatedString;
       @   ensures accumulatedString.equals(\old(String.concat(accumulatedString,String.valueOf(d))));
       @   ensures \result == this;
       @*/
     public synchronized StringBuffer append(double d);
 
-    /*@ public normal_behavior
+    /*-RAC@ public normal_behavior
       @   requires ca != null;
       @   assignable accumulatedString;
       @   ensures accumulatedString.equals(\old(String.concat(accumulatedString,String.valueOf(ca))));
@@ -162,7 +162,7 @@ final public class StringBuffer implements java.io.Serializable, CharSequence {
       @*/
     public synchronized StringBuffer append(char[] ca);
 
-    /*@ public normal_behavior
+    /*-RAC@ public normal_behavior
       @   assignable accumulatedString;
       @   ensures accumulatedString.equals(\old(String.concat(accumulatedString,String.valueOf(l))));
       @   ensures \result == this;
@@ -224,7 +224,7 @@ final public class StringBuffer implements java.io.Serializable, CharSequence {
     /*@  public normal_behavior
       @     requires (\exists int k; 0 <= k && k < accumulatedString.length();
       @                              accumulatedString.startsWith(str, k));
-      @     assignable \nothing;
+      @     //assignable \nothing;
       @     ensures \result
       @             == (\max int k; 0 <= k && k < accumulatedString.length()
       @                             && accumulatedString.startsWith(str, k);
@@ -233,7 +233,7 @@ final public class StringBuffer implements java.io.Serializable, CharSequence {
       @   public normal_behavior
       @     requires !(\exists int k; 0 <= k && k < accumulatedString.length();
       @                               accumulatedString.startsWith(str, k));
-      @     assignable \nothing;
+      @     //assignable \nothing;
       @     ensures \result == -1;
       @*/
     public /*@ pure @*/ synchronized int lastIndexOf(/*@non_null*/String str);
@@ -252,7 +252,7 @@ final public class StringBuffer implements java.io.Serializable, CharSequence {
       @     requires !(\exists int k; 0 <= k && k < accumulatedString.length();
       @                               accumulatedString.startsWith(str, k)
       @                               && k <= Math.min(fromIndex, str.length()));
-      @     assignable \nothing;
+      @     //assignable \nothing;
       @     ensures \result == -1;
       @*/
     public /*@ pure @*/ synchronized int lastIndexOf(/*@non_null*/String str, int fromIndex);
@@ -265,7 +265,7 @@ final public class StringBuffer implements java.io.Serializable, CharSequence {
 
     public synchronized StringBuffer replace(int start, int end, String str);
 
-    public /*@ pure @*/ CharSequence subSequence(int start, int end);
+    public /*@ pure @*/ synchronized CharSequence subSequence(int start, int end);  // CHANGE IN 1.6
 
     public /*@ pure @*/ synchronized int capacity();
 
@@ -413,7 +413,7 @@ final public class StringBuffer implements java.io.Serializable, CharSequence {
     // !FIXME! not sure this is really pure, but CharSequence requires purity
     //@  assignable \nothing;
     //@  ensures \result.equals(accumulatedString);
-    public String toString();
+    public synchronized String toString();
 
     public synchronized void setLength(int i);
 

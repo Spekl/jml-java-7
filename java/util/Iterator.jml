@@ -30,17 +30,18 @@ package java.util;
  * @author Joe Kiniry
  * @author David Cok
  */
-public interface Iterator {
+public interface Iterator<E> {
 
     /** Do we have more elements?
      **/
-    /*@ public model instance boolean moreElements;
-      @                               in objectState;
-      @*/
-
-    /** The type of the elements we return.
-     **/
-    //@ instance ghost public \TYPE elementType;
+    /*+ESC@ public ghost instance boolean moreElements; // FIXME - only lghost elements are handled in assignable lists
+    @                               in objectState;
+    @*/
+    /*-ESC@ public model instance boolean moreElements;
+    @                               in objectState;
+    @*/
+	//-ESC@ public represents moreElements = hasNext(); // FIXME - does this recursive definition work for RAC?
+	                                                    // FIXME - should have a warning for ESC
 
     /** Do we ever return null as an element?
      **/
@@ -56,12 +57,11 @@ public interface Iterator {
     //@ public instance ghost boolean remove_called_since = false;
 
     /*@ public normal_behavior
-      @    assignable objectState;
+      @    // assignable objectState;
       @    ensures \result <==> moreElements;
       @*/
+	//@ pure
     boolean hasNext();
-
-    //+@ public invariant moreElements == hasNext(0);
 
     /*@ public normal_behavior
       @     requires n >= 0;
@@ -73,7 +73,6 @@ public interface Iterator {
       @     requires moreElements;
       @     assignable objectState, remove_called_since, moreElements;
       @     ensures !remove_called_since;
-      @     ensures (\result == null) || \typeof(\result) <: elementType;
       @     ensures !returnsNull ==> (\result != null);
       @ also
       @   public exceptional_behavior
@@ -81,20 +80,19 @@ public interface Iterator {
       @     assignable \nothing;
       @     signals_only NoSuchElementException;
       @*/
-    Object next();
+    E next();
 
     /*@ public normal_behavior
       @    requires n >= 0 && hasNext(n);
       @    ensures (* \result is the nth, counting from 0,
       @             next element that would be returned by this iterator *);
       @    ensures !returnsNull ==> \result != null;
-      @    ensures \result == null || \typeof(\result) <: elementType;
       @ for_example
       @    public normal_example
       @      requires n == 0 && moreElements;
       @      ensures (* \result == the object that would be
       @                 returned by calling next() *);
-      public pure model Object nthNextElement(int n);  @*/
+      public pure model E nthNextElement(int n);  @*/
 
     /*@ public behavior
       @   assignable objectState, remove_called_since;

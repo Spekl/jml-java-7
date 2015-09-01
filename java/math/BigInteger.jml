@@ -22,7 +22,6 @@ package java.math;
 
 import java.util.Random;
 
-// FIXME
 /** JML's specification of java.math.BigInteger.
  *
  * @version $Revision: 1388 $
@@ -45,7 +44,7 @@ public /*@ pure @*/ class BigInteger extends Number implements Comparable {
 
     //--- public model \bigint value; --
     //@ public model int sign;
-    //@ public represents sign <- signum();
+    //@ public represents sign = signum();
     //@ public invariant sign == compareTo(ZERO);
 
 
@@ -115,14 +114,14 @@ public /*@ pure @*/ class BigInteger extends Number implements Comparable {
     //@ pure
     public BigInteger(int bitLength, int certainty, Random rnd);
 
-    //@ model pure public BigInteger(\bigint val);
+    // FIXME - when bigint is not equivalent to long  //@ model pure public BigInteger(\bigint val);
 
     public static /*@ pure @*/ BigInteger probablePrime(int bitLength,
                                                           Random rnd);
 
-    boolean primeToCertainty(int certainty);
+    // boolean primeToCertainty(int certainty);
 
-    int jacobiSymbol(int p, BigInteger n);
+    private static int jacobiSymbol(int p, BigInteger n);
 
     // BigInteger(MutableBigInteger val, int sign);
 
@@ -130,8 +129,8 @@ public /*@ pure @*/ class BigInteger extends Number implements Comparable {
 
     public static /*@ pure @*/ BigInteger valueOf(long val);
 
-    int signum;
-    int[] mag; 
+    final int signum;
+    final int[] mag; 
     public static final BigInteger ZERO;
     public static final BigInteger ONE;
 
@@ -234,15 +233,15 @@ public /*@ pure @*/ class BigInteger extends Number implements Comparable {
 
     public int bitLength();
 
-    static int bitLen(int w);
+    //static int bitLen(int w);
 
-    static final byte[] trailingZeroTable;
+    //static final byte[] trailingZeroTable;
 
     public int bitCount();
 
-    static int bitCnt(int val);
+    //static int bitCnt(int val);
 
-    static int trailingZeroCnt(int val);
+    //static int trailingZeroCnt(int val);
 
     // Primality Testing
 
@@ -252,14 +251,13 @@ public /*@ pure @*/ class BigInteger extends Number implements Comparable {
 
     public int compareTo(BigInteger val);
 
-    public int compareTo(Object o);
 
     /*@ also public normal_behavior
       @   requires x != null && x instanceof BigInteger;
       @   assignable \nothing;
       @   ensures \result == x.equals(this);
       @*/
-    public /*@ pure @*/ boolean equals(/*@ nullable \readonly @*/ Object x);
+    public /*@ pure @*/ boolean equals(Object x);
 
     public BigInteger min(BigInteger val);
 

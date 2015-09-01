@@ -53,14 +53,14 @@ public /*@ pure @*/ final
 
           
     public static final long MIN_VALUE;
-                     //@ initially MIN_VALUE == 0x8000000000000000L;
+             //@ public initially MIN_VALUE == 0x8000000000000000L;
 
     public static final long MAX_VALUE;
-                     //@ initially MAX_VALUE == 0x7fffffffffffffffL;
+             //@ public initially MAX_VALUE == 0x7fffffffffffffffL;
 
-    public static final Class TYPE;
-                     //@ initially TYPE == \type(long);
-		     //@ invariant_redundantly TYPE == long.class;
+    public static final Class<Long> TYPE;
+             //@ public initially TYPE == long.class;
+		     //@ public invariant_redundantly TYPE == long.class;
 
     /*@ public normal_behavior
       @   requires (Character.MIN_RADIX <= radix
@@ -214,6 +214,11 @@ public /*@ pure @*/ final
         throws NumberFormatException;
 
     /*@ public normal_behavior
+    @   ensures \result.longValue() == i;
+    @*/
+   public static /*@ pure @*/ /*@ non_null @*/ Long valueOf(long i);
+
+   /*@ public normal_behavior
       @   assignable theLong;
       @   ensures theLong == value;
       @*/
@@ -302,7 +307,7 @@ public /*@ pure @*/ final
       @     requires obj == null || !(obj instanceof Long);
       @     ensures !\result;
       @*/
-    public boolean equals(/*@nullable*/Object obj);
+    public boolean equals(Object obj);
 
     /*@ public normal_behavior
       @   ensures (\result == null && getLong(nm,null) == null) ||
@@ -351,20 +356,20 @@ public /*@ pure @*/ final
       @*/
     public int compareTo(Long anotherLong);
 
-    /*@ also
-      @   public normal_behavior
-      @     requires o != null && (o instanceof Long);
-      @     ensures \result == compareTo((Long) o);
-      @ also
-      @   public exceptional_behavior
-      @     requires o != null && !(o instanceof Long);
-      @     signals_only ClassCastException;
-      @ also
-      @   public exceptional_behavior
-      @     requires o == null;
-      @     signals_only NullPointerException;
-      @*/
-    public int compareTo(Object o);
+//    /*@ also
+//      @   public normal_behavior
+//      @     requires o != null && (o instanceof Long);
+//      @     ensures \result == compareTo((Long) o);
+//      @ also
+//      @   public exceptional_behavior
+//      @     requires o != null && !(o instanceof Long);
+//      @     signals_only ClassCastException;
+//      @ also
+//      @   public exceptional_behavior
+//      @     requires o == null;
+//      @     signals_only NullPointerException;
+//      @*/
+//    public int compareTo(Object o);
 
 
 }

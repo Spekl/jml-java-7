@@ -17,6 +17,7 @@
 // the Free Software Foundation, 675 Mass Ave, Cambridge, MA 02139, USA.
 
 /** This is based on earlier work by chalin, edited by cok.
+ *  Java 1.5 differs from Java 1.4.2 only in the type of the field TYPE.  // 1.5 DIFFERENCE
  */
 package java.lang;
 
@@ -27,7 +28,7 @@ package java.lang;
  * @author David R. Cok
  */
 //-@ immutable
-public final /*@ pure @*/ class Boolean implements java.io.Serializable {
+public final /*@ pure @*/ class Boolean implements java.io.Serializable, Comparable<Boolean> {
 
     //@ non_null
     public static final Boolean TRUE;
@@ -36,24 +37,24 @@ public final /*@ pure @*/ class Boolean implements java.io.Serializable {
     public static final Boolean FALSE;
 
     //@ non_null
-    public static final Class	TYPE;
-    //@ initially TYPE == \type(Boolean);
+    public static final Class<Boolean>	TYPE;       // 1.5 DIFFERENCE
+    //@ public initially TYPE == boolean.class;    // 1.5 DIFFERENCE
 
     //@ public model boolean theBoolean; in objectState;
 
     /*@ public normal_behavior
       @   ensures theBoolean == value;
       @*/
-    //@ pure
+    //@ pure helper
     public Boolean(boolean value);
 
     /*@ public normal_behavior
-      @   ensures \result <==> (s != null && s.equalsIgnoreCase("true"));
-      @ public static pure model boolean decode(String s);
+      @   ensures \result <==> ("true".equalsIgnoreCase(s));
+      @ public static pure helper model boolean decode( nullable String s);
       @
       @ public normal_behavior
       @   ensures \result == ( b ? "true" : "false" );
-      @ public static pure model String canonicalString(boolean b);
+      @ public static pure helper model String canonicalString(boolean b);
       @*/
 
     //@ axiom decode(canonicalString(true)) == true;
@@ -76,20 +77,20 @@ public final /*@ pure @*/ class Boolean implements java.io.Serializable {
     /*@ public normal_behavior
       @   ensures \result == theBoolean;
       @*/
-    public /*@ pure @*/ boolean booleanValue();
+    public /*@ pure helper @*/ boolean booleanValue();
 
     // NOTE: The result is not fresh
     /*@ public normal_behavior
       @   ensures \result != null && \result.booleanValue() == b;
       @   ensures \result == ( b ? TRUE : FALSE );
       @*/
-    public static /*@ pure @*/ Boolean valueOf(boolean b);
+    public static /*@ pure helper @*/ Boolean valueOf(boolean b);
 
 
     /*@ public normal_behavior
       @   ensures \result == ( decode(s) ? TRUE : FALSE );
       @*/
-    public static /*@ pure @*/ Boolean valueOf(String s);
+    public static /*@ pure helper @*/ Boolean valueOf(String s);
 
     // NOTE: The results are interned (not fresh) Strings.
     /*@ public normal_behavior
@@ -107,15 +108,13 @@ public final /*@ pure @*/ class Boolean implements java.io.Serializable {
     public String toString();
 
     // TODO - do we need this
-    //+@ public static model int TRUE_HC;
-    //+@ public static model int FALSE_HC;
-    //-@ public static final model int TRUE_HC;
-    //-@ public static final model int FALSE_HC;
-    //@ axiom TRUE_HC != FALSE_HC;
+    //+ESC@ public static model int TRUE_HC;
+    //+ESC@ public static model int FALSE_HC;
+    //+ESC@ axiom TRUE_HC != FALSE_HC;
 
     // inherited specification
-    //@ also public normal_behavior
-    //@   ensures \result == ( theBoolean ? TRUE_HC : FALSE_HC);
+    //+ESC@ also public normal_behavior
+    //+ESC@   ensures \result == ( theBoolean ? TRUE_HC : FALSE_HC);
     public int hashCode();
 
     /*@ 
@@ -123,7 +122,7 @@ public final /*@ pure @*/ class Boolean implements java.io.Serializable {
       @   ensures \result <==> ( t == obj || (t!= null && obj != null 
                          && (t.theBoolean == obj.theBoolean)));
         //-@ function
-      @ public pure static model boolean equalsBoolean(Boolean t, Boolean obj);
+      @ public pure helper static model boolean equalsBoolean(Boolean t, Boolean obj);
       @*/
 
     /*@ also
@@ -131,7 +130,7 @@ public final /*@ pure @*/ class Boolean implements java.io.Serializable {
       @   ensures \result <==> ( obj != null && (obj instanceof Boolean)
                          && equalsBoolean(this, (Boolean)obj));
       @*/
-    public /*@ pure @*/ boolean equals(/*@\readonly*//*@nullable*/Object obj);
+    public /*@ pure @*/ boolean equals(Object obj);
     
     /*@ public normal_behavior
       @   ensures \result <==> (name != null && 

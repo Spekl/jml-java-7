@@ -21,7 +21,7 @@
 // This is a quick spec so that we can test TreeMap
 package java.util;
 
-public abstract class AbstractMap implements Map {
+public abstract class AbstractMap<K,V> implements Map<K,V> {
     /*@ public normal_behavior
       @   ensures \result <==> initialMap();
       @ public pure model boolean initialAbstractMap();
@@ -39,15 +39,15 @@ public abstract class AbstractMap implements Map {
     public boolean isEmpty();
     public boolean containsValue(Object value);
     public boolean containsKey(Object key);
-    public Object get(Object key);
-    public Object put(Object key, Object value);
-    public Object remove(Object key);
-    public void putAll(Map t);
+    public V get(Object key);
+    public V put(K key, V value);
+    public V remove(Object key);
+    public void putAll(Map<? extends K,? extends V> t);
     public void clear();
-    public Set keySet();
-    public Collection values();
-    public abstract Set entrySet();
-    public boolean equals(/*@ nullable \readonly @*/ Object o);
+    public Set<K> keySet();
+    public Collection<V> values();
+    public abstract Set<Map.Entry<K,V>> entrySet();
+    public boolean equals(Object o);
     public int hashCode();
     public String toString();
     protected Object clone() throws CloneNotSupportedException;

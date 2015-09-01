@@ -23,8 +23,8 @@ package java.util;
  * @author Katie Becker
  * @author Gary T. Leavens
  */
-public class Hashtable extends Dictionary
-    implements Map, Cloneable, java.io.Serializable
+public class Hashtable<K,V> extends Dictionary<K,V>
+    implements Map<K,V>, Cloneable, java.io.Serializable
 {
     // NOTE: A Hashtable does not allow null elements
  
@@ -34,7 +34,7 @@ public class Hashtable extends Dictionary
     
     //@ public invariant initialCapacity >= 0;  
     //@ public invariant mLoadFactor > 0;
-      
+    
     /*@
       @ public normal_behavior
       @   ensures \result <==> ( initialMap() &&
@@ -77,7 +77,7 @@ public class Hashtable extends Dictionary
 // FIXME - what if argument has a null key or value?
       @*/     
     //@ pure
-    public Hashtable(Map t);
+    public Hashtable(Map<? extends K,? extends V> t);
 
     // specification inherited
     public synchronized int size();
@@ -98,26 +98,27 @@ public class Hashtable extends Dictionary
     //@ also public exceptional_behavior
     //@   requires key == null;
     //@   signals_only NullPointerException;
+    //@ pure
     public synchronized boolean containsKey(Object key) throws RuntimeException;
 
     // specification inherited
     //@ also public exceptional_behavior
     //@   requires key == null;
     //@   signals_only NullPointerException;
-    public synchronized Object get(Object key);
+    public synchronized V get(Object key);
 
     // FIXME - need specs for these enumerators
     /*@ also
       @   normal_behavior
       @     ensures \fresh(\result); 
       @*/
-    public /*@ pure @*/ synchronized Enumeration keys(); 
+    public /*@ pure @*/ synchronized Enumeration<K> keys(); 
  
     /*@ also 
       @   normal_behavior
       @     ensures \fresh(\result);  
       @*/
-    public /*@ pure @*/ synchronized Enumeration elements(); 
+    public /*@ pure @*/ synchronized Enumeration<V> elements(); 
 
     /*@ also
       @   public behavior
@@ -137,17 +138,17 @@ public class Hashtable extends Dictionary
     //@   requires key == null || value == null;
     //@   assignable \not_specified;
     //@   signals_only NullPointerException;
-    public synchronized Object put(Object key, Object value);
+    public synchronized V put(K key, V value);
 
     // specification inherited
     //@ also public exceptional_behavior
     //@   requires key == null;
     //@   assignable \not_specified;
     //@   signals_only NullPointerException;
-    public synchronized Object remove(Object key);
+    public synchronized V remove(Object key);
 
     // specification inherited
-    public synchronized void putAll(Map t);
+    public synchronized void putAll(Map<? extends K, ? extends V> t);
 
     // specification inherited
     public synchronized void clear();
@@ -166,16 +167,16 @@ public class Hashtable extends Dictionary
     public synchronized String toString();
 
     // specification inherited
-    public Set keySet();
+    public Set<K> keySet();
 
     // specification inherited
-    public Set entrySet();
+    public Set<Map.Entry<K,V>> entrySet();
 
    // specification inherited
-    public Collection values();
+    public Collection<V> values();
 
     // specification inherited
-    public synchronized boolean equals(/*@\readonly*//*@nullable*/Object o);
+    public synchronized boolean equals(Object o);
 
    // specification inherited
     public synchronized int hashCode();

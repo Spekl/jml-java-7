@@ -8,6 +8,7 @@
 // the Free Software Foundation, 675 Mass Ave, Cambridge, MA 02139, USA.
 
 /** This specification file was generated automatically and edited by cok
+ *  The 1.5 difference is in the signatures of currentLoadedClass and checkMemberAccess // 1.5 DIFFERENCE
 */
 
 package java.lang;
@@ -64,7 +65,7 @@ public class SecurityManager {
     /*@
       @ 
       @*/
-    protected Class currentLoadedClass();
+    protected Class<?> currentLoadedClass(); // 1.5 DIFFERENCE
 
     /** @deprecated */
     /*@
@@ -244,7 +245,7 @@ public class SecurityManager {
     /*@
       @ 
       @*/
-    public void checkMemberAccess(Class clazz, int which);
+    public void checkMemberAccess(Class<?> clazz, int which); // 1.5 DIFFERENCE
 
     /*@
       @ 

@@ -18,6 +18,8 @@
 
 package java.util;
 
+// THIS NEEDS A COMPLETE EDIT - CHANGES FROM 1.4 to 1.5 to 1.6 FIXME
+
 /** JML's specification of java.util.Calendar.
  * @version $Revision: 1613 $
  * @author Kristina Boysen
@@ -30,29 +32,29 @@ public class GregorianCalendar extends Calendar {
     public static final int AD;
 
     //@ public static model int  JAN_1_1_JULIAN_DAY;
-    //@ public static represents JAN_1_1_JULIAN_DAY <- 1721426;
-    //@ public static model int  EPOCH_JULIAN_DAY;
-    //@ public static represents EPOCH_JULIAN_DAY <- 2440588;
-    //@ public static model int  EPOCH_YEAR;
-    //@ public static represents EPOCH_YEAR <- 1970;
+    //@ public static represents JAN_1_1_JULIAN_DAY = 1721426;
+//    private /*@ spec_public*/ final static  int  EPOCH_JULIAN_DAY;
+//    // FIXME static represents EPOCH_JULIAN_DAY = 2440588;
+    private /*@ spec_public*/ final static  int  EPOCH_YEAR;
+    // FIXME public static represents EPOCH_YEAR = 1970;
 
     //@ public static final ghost int NUM_DAYS[] = {0,31,59,90,120,151,181,212,243,273,304,334};
     //@ public static final ghost int LEAP_NUM_DAYS[] = {0,31,60,91,121,152,182,213,244,274,305,335};
-    //@ public static final ghost int MONTH_LENGTH[] = {31,28,31,30,31,30,31,31,30,31,30,31};
-    //@ public static final ghost int LEAP_MONTH_LENGTH[] = {31,29,31,30,31,30,31,31,30,31,30,31};
+    /*@ spec_public*/ static final int MONTH_LENGTH[] ;//= {31,28,31,30,31,30,31,31,30,31,30,31};
+    /*@ spec_public*/ static final int LEAP_MONTH_LENGTH[] ;//= {31,29,31,30,31,30,31,31,30,31,30,31};
 
-    /*@ constraint 
+    /*@ public constraint 
       @		\old(NUM_DAYS).equals(NUM_DAYS) &&
       @		\old(LEAP_NUM_DAYS).equals(LEAP_NUM_DAYS) &&
       @		\old(MONTH_LENGTH).equals(MONTH_LENGTH) &&
       @		\old(LEAP_MONTH_LENGTH).equals(LEAP_MONTH_LENGTH);
       @*/
 
-    //@ public static model int  ONE_SECOND; public static represents ONE_SECOND = 1000;
-    //@ public static model int  ONE_MINUTE; public static represents ONE_MINUTE = 60*ONE_SECOND;
-    //@ public static model int  ONE_HOUR;   public static represents ONE_HOUR   = 60*ONE_MINUTE;
-    //@ public static model long ONE_DAY;    public static represents ONE_DAY    = 24*ONE_HOUR;
-    //@ public static model long ONE_WEEK;   public static represents ONE_WEEK   = 7*ONE_DAY;
+    private /*@ spec_public */ final static int  ONE_SECOND; //public static represents ONE_SECOND = 1000;
+    private /*@ spec_public */ final static int  ONE_MINUTE; //public static represents ONE_MINUTE = 60*ONE_SECOND;
+    private /*@ spec_public */ final static int  ONE_HOUR;   //public static represents ONE_HOUR   = 60*ONE_MINUTE;
+    private /*@ spec_public */ final static long ONE_DAY;    //public static represents ONE_DAY    = 24*ONE_HOUR;
+    private /*@ spec_public */ final static long ONE_WEEK;   //public static represents ONE_WEEK   = 7*ONE_DAY;
 
     /*
      * <pre>
@@ -80,7 +82,11 @@ public class GregorianCalendar extends Calendar {
      * (*) In units of one-hour
      */
 
-    /*@ public static final ghost int MIN_VALUES[] = {
+    /*@ spec_public*/ static final int MIN_VALUES[];
+    /*@ spec_public*/ static final int MAX_VALUES[];
+    /*@ spec_public*/ static final int LEAST_MAX_VALUES[];
+    
+    /* FIXME @ public static final ghost int MIN_VALUES[] = {
       @   0,1,0,1,0,1,1,1,-1,0,0,0,0,0,0,-12*ONE_HOUR,0
       @ };
       @
@@ -98,12 +104,12 @@ public class GregorianCalendar extends Calendar {
       @		\old(LEAST_MAX_VALUES).equals(LEAST_MAX_VALUES);
       @*/
 
-    //@ public model long gregorianCutover; 
-    //@ public represents gregorianCutover = -12219292800000L;
+    private /*@ spec_public*/ long gregorianCutover; 
+    // FIXME //@ public represents gregorianCutover = -12219292800000L;
     //@ public model long normalizedGregorianCutover;
     //@ public represents normalizedGregorianCutover = gregorianCutover;
-    //@ public model int gregorianCutoverYear;
-    //@ public represents gregorianCutoverYear = 1582;
+    private transient /*@ spec_public*/ int gregorianCutoverYear;
+    // FIXME //@ public represents gregorianCutoverYear = 1582;
     
     /*@ public invariant zone != null;
       @ public invariant locale != null;
@@ -212,11 +218,24 @@ public class GregorianCalendar extends Calendar {
       @ public pure model boolean isYAmountNotZero(int month);
       @*/
     
+    /** This should compute the daylight savings time (DST) for any field that
+     * sets its adjustDST variable to true.
+     * @return the dst value for the given DST offsets
+     */
+    /* @ //public normal_behavior  // FIXME - is old not implemented?
+      @ //    old int dst = 0;
+      @ //    requires adjustDST;
+      @ //    assignable \nothing;
+      @ //    ensures dst == oldDSTOffset - newDSTOffset; 
+      */
+    /*@ public pure model method int computeDST(boolean adjustDST, int oldDSTOffset, int newDSTOffset);
+      @ */
+       
     /** This should compute the number of milliseconds in the entered field
      * and multiply the entered amount by that delta value.
      * @return the delta value for the entered field and amount
      */
-    /*@ public normal_behavior
+    /* FIXME @ public normal_behavior
       @     old int delta = amount;
       @          {|
       @               requires field == WEEK_OF_YEAR || field == WEEK_OF_MONTH
@@ -245,22 +264,9 @@ public class GregorianCalendar extends Calendar {
       @               assignable \nothing;
       @               ensures delta == delta * 1000;
       @     |}
-      @ public pure model method long computeDelta(int field, int amount);
-      @*/
+      */
+    //@ public pure model method long computeDelta(int field, int amount);
     
-    /** This should compute the daylight savings time (DST) for any field that
-     * sets its adjustDST variable to true.
-     * @return the dst value for the given DST offsets
-     */
-    /*@ public normal_behavior
-      @     old int dst = 0;
-      @     requires adjustDST;
-      @     assignable \nothing;
-      @     ensures dst == oldDSTOffset - newDSTOffset;
-      @ public pure model int computeDST(boolean adjustDST, int oldDSTOffset,
-      @                                   int newDSTOffset);
-      @*/
-       
     /* Model methods used in getActualMaximum(int field)
      */
     
@@ -268,13 +274,13 @@ public class GregorianCalendar extends Calendar {
      * depending on the type of calendar.
      * @return the maximum possible value for YEAR, depending on the calendar
      */
-    /*@ public normal_behavior
+    /* @ public normal_behavior  // FIXME
       @     old int lowGood = LEAST_MAX_VALUES[YEAR];
       @     assignable \nothing;
       @     ensures \result == lowGood && LEAST_MAX_VALUES[YEAR] <= lowGood
       @             && lowGood <= MAX_VALUES[YEAR] + 1;
-      @ public pure model int computeLowGood();
       @*/
+    //@ public pure model int computeLowGood();
        
     /* Model methods used for roll(int field, int amount)
      */
@@ -284,25 +290,24 @@ public class GregorianCalendar extends Calendar {
      * rolling the hour over the onset or cease of daylight savings time.
      * @return the value by which oldHour changes after amount is added
      */
-    /*@ public normal_behavior
+    /* @ public normal_behavior  // FIXME
       @     old int newHour = (int)((oldHour + amount) % (getMaximum(field) + 1));
       @     assignable \nothing;
       @     ensures \result == newHour && getMinimum(HOUR) <= newHour
-      @             && newHour <= getMaximum(HOUR);
-      @ public pure model method int computeNewHour(int field, int amount,
+      @             && newHour <= getMaximum(HOUR); */
+    /*@ public pure model method int computeNewHour(int field, int amount,
       @                                       Date start, int oldHour);
       @*/
     
     /** This should compute the new month value after amount is added to it.
      * @return the new month value after amount is added
      */
-    /*@ public normal_behavior
+    /* @ public normal_behavior // FIXME
       @     old int mon = (int)(get(MONTH) + amount) % 12;
       @     assignable \nothing;
       @     ensures \result == mon && getMinimum(MONTH) <= mon
-      @             && mon <= getMaximum(MONTH);
-      @ public pure model int computeMonth(int amount);
-      @*/
+      @             && mon <= getMaximum(MONTH); */
+    //@ public pure model int computeMonth(int amount);
     
     /** This should compute the new week of year value after amount is added 
      * to it.  The rolling of this value depends on how many days per week, as
@@ -311,65 +316,65 @@ public class GregorianCalendar extends Calendar {
      * calendar.
      * @return the new week of year value after amount is added
      */
-    /*@ public normal_behavior
+    /* @ public normal_behavior // FIXME
       @     old int woy = get(WEEK_OF_YEAR);
       @     assignable \nothing;
       @     ensures \result == woy && 1 <= woy && woy <= 52;
-      @ public pure model int computeWoy(int amount);
       @*/
+    //@ public pure model int computeWoy(int amount);
     
     /** This should return the ISO year depending on the conditions of
      * WEEK_OF_YEAR and MONTH.  These values, in turn, depend on the calendar
      * restrictions on these values.
      * @return the ISO year
      */
-    /*@ public normal_behavior
+    /* @ public normal_behavior  // FIXME
       @     old int isoYear = get(YEAR);
       @     assignable \nothing;
       @     ensures \result == isoYear && getMinimum(YEAR) <= isoYear
       @             && isoYear <= getMaximum(YEAR);
-      @ public pure model int computeIsoYear();
       @*/
+    //@ public pure model int computeIsoYear();
     
     /** This should compute the new day of week after amount is added to it.
      * The day of week holds the value of the current day in the week (Sunday,
      * Monday, etc.).  This is changed when rolling occurs.
      * @return the day of week after amount is added
      */
-    /*@ public normal_behavior
+    /* @ public normal_behavior  // FIXME
       @     old int day_of_month = 0;
       @     assignable \nothing;
       @     ensures \result == day_of_month 
       @             && getMinimum(DAY_OF_MONTH) <= day_of_month
       @             && day_of_month <= getMaximum(DAY_OF_MONTH);
-      @ public pure model int computeDayOfMonth(int amount);
       @*/
+    //@ public pure model int computeDayOfMonth(int amount);
     
     /** This should compute min2 value used for computing the roll amount
      * for DAY_OF_WEEK.  Min2 is the number of days before the current
      * day in the week in question.
      * @return min2 for use in computing the DAY_OF_WEEK roll amount
      */
-    /*@ public normal_behavior
+    /* @ public normal_behavior // FIXME
       @     old int leadDays = (int)(get(DAY_OF_WEEK) - getFirstDayOfWeek());
       @     old long min2 = 0;
       @     ensures \result == min2 && min2 == time - leadDays * ONE_DAY;
-      @ public pure model long computeMin2();
       @*/
+    //@ public pure model long computeMin2();
     
     /** This should compute the new value for which to roll field after amount 
      * is added to it.  This is computed for the standard roll instructions
      * used for the default field.
      * @return the new value for which to roll field after amount is added
      */
-    /*@ public normal_behavior
+    /* @ public normal_behavior // FIXME
       @     old int fieldAmount = get(field);
       @     old int value = 0;
       @     assignable \nothing;
       @     ensures \result == value && getMinimum(field) <= fieldAmount + value
       @             && fieldAmount + value <+ getMaximum(field);
-      @ public pure model method int computeValue(int field, int amount);
       @*/
+    //@ public pure model method int computeValue(int field, int amount);
        
     /* Model methods used for computeFields()
      */
@@ -379,34 +384,34 @@ public class GregorianCalendar extends Calendar {
      * the correct time zone.
      * @return the number of milliseconds past midnight for the given date
      */
-    /*@ public normal_behavior
+    /* FIXME @ public normal_behavior
       @         ensures 0 <= \result && \result < ONE_DAY;
-      @ public pure model method long computeMillisInDay(long millis);
       @*/
+    //@ public pure model method long computeMillisInDay(long millis);
        
     /** This should return the number of milliseconds past midnight for
      * for the date specified by millis.  This should take into account
      * the correct time zone.
      * @return the number of milliseconds past midnight for the given date
      */
-    /*@ public normal_behavior
+    /* FIXME @ public normal_behavior
       @     ensures -ONE_DAY <= \result[0] && \result[0] <= ONE_DAY
       @             && -ONE_DAY <= \result[1] && \result[1] <= ONE_DAY;
-      @ public pure model method int[] getOffsetsForComputeFields();
       @*/
+    //@ public pure model method int[] getOffsetsForComputeFields();
 
     /** This should return true if the isSet[field] methods all are true
      * and if calendarFieldsAreSet() also returns true.
      * @return true if all isSet[field] return true and if 
      *  calendarFieldsAreSet(); false otherwise.
      */
-    /*@ public normal_behavior
+    /* FIXME @ public normal_behavior
       @    ensures isSet[ERA] && isSet[YEAR] && isSet[MONTH] && isSet[DATE] 
       @            && isSet[DAY_OF_WEEK] && isSet[DAY_OF_YEAR] 
       @            && isSet[WEEK_OF_YEAR] && isSet[WEEK_OF_MONTH] 
       @            && isSet[DAY_OF_WEEK_IN_MONTH] && calendarFieldsAreSet();
-      @ public pure model method boolean timeToFieldsVarsAreSet();
       @*/
+    //@ public pure model method boolean timeToFieldsVarsAreSet();
     
     /** Model methods used for computeTime()
      */
@@ -419,8 +424,8 @@ public class GregorianCalendar extends Calendar {
      * @return true if millis is less than or equal to the current system time
      *         in millis; false otherwise
      */
-    //+@ public pure model method boolean millisAreBeforeCurrent(long millis);
-    /*-@ public pure model method boolean millisAreBeforeCurrent(long millis) {
+    // FIXME +@ public pure model method boolean millisAreBeforeCurrent(long millis);
+    /* FIXME -@ public pure model method boolean millisAreBeforeCurrent(long millis) {
       @     return millis <= System.currentTimeMillis();
       @ }
       @*/
@@ -430,13 +435,13 @@ public class GregorianCalendar extends Calendar {
      * @return the number of milliseconds from current values of the fields 
      *  without DST or time zone adjustments.
      */
-    /*@ public normal_behavior
+    /* FIXME @ public normal_behavior
       @     old long millis = 0;
       @     assignable \nothing;
       @     ensures \result == millis && 0 <= millis
       @             && millisAreBeforeCurrent(millis);
-      @ public pure model method long computeMillis();
       @*/
+    //@ public pure model method long computeMillis();
 
     /** This should return the correct time zone offset for the current
      * time zone and the given time, specified by the argument millis.
@@ -444,10 +449,10 @@ public class GregorianCalendar extends Calendar {
      * data structures contain.
      * @return the number of milliseconds for the time zone offset from GMT
      */
-    /*@ public normal_behavior
+    /* FIXME @ public normal_behavior
       @     ensures -ONE_DAY <= \result && \result <= ONE_DAY;
-      @ public pure model method int computeZoneOffset(long millis);
       @*/
+    //@ public pure model method int computeZoneOffset(long millis);
        
     //------------------------------------------------------------------------
     // Class Method Specifications
@@ -486,7 +491,7 @@ public class GregorianCalendar extends Calendar {
       @*/
     public GregorianCalendar(TimeZone zone, Locale aLocale);
 
-    /*@ public normal_behavior
+    /* FIXME @ public normal_behavior
       @ assignable zone, locale;
       @ assignable_redundantly fields[YEAR], fields[MONTH], fields[DATE],
       @                        isTimeSet, areFieldsSet, isSet[*];
@@ -595,7 +600,7 @@ public class GregorianCalendar extends Calendar {
       @     ensures obj instanceof GregorianCalendar
       @             && gregorianCutover == gcal.gregorianCutover;
       @*/
-    public boolean equals(/*@nullable*/Object obj);
+    public boolean equals(Object obj);
     
     // Specification is inherited
     public int hashCode();
@@ -1002,28 +1007,28 @@ public class GregorianCalendar extends Calendar {
       @*/
     public /*@ pure @*/ int getActualMaximum(int field);
 
-    /*@  normal_behavior
-      @     requires !getTimeZone().useDaylightTime();
-      @     assignable \nothing;
-      @     ensures \result == false;
-      @ also
-      @   normal_behavior
-      @     requires getTimeZone().useDaylightTime();
-      @     assignable \nothing;
-      @     ensures \result == (get(DST_OFFSET) != 0);
-      @     ensures_redundantly isComplete();
-      @*/
-    boolean inDaylightTime();
+//    /*@  normal_behavior
+//      @     requires !getTimeZone().useDaylightTime();
+//      @     assignable \nothing;
+//      @     ensures \result == false;
+//      @ also
+//      @   normal_behavior
+//      @     requires getTimeZone().useDaylightTime();
+//      @     assignable \nothing;
+//      @     ensures \result == (get(DST_OFFSET) != 0);
+//      @     ensures_redundantly isComplete();
+//      @*/
+//    boolean inDaylightTime();
 
-    /*@ normal_behavior
-      @     old int isoYear = get(YEAR);
-      @     assignable \nothing;
-      @     ensures \result == isoYear;
-      @     ensures_redundantly isComplete();
-      @*/
-    /*@ pure @*/ int getISOYear();
+//    /*@ normal_behavior
+//      @     old int isoYear = get(YEAR);
+//      @     assignable \nothing;
+//      @     ensures \result == isoYear;
+//      @     ensures_redundantly isComplete();
+//      @*/
+//    /*@ pure @*/ int getISOYear();
 
-    /*@ also
+    /* FIXME @ also
       @   protected normal_behavior
       @     old long valueForMillis = computeMillisInDay(time);
       @     old long valueForSecond = (long)(valueForMillis / 1000);
@@ -1098,8 +1103,7 @@ public class GregorianCalendar extends Calendar {
       @     assignable \nothing;
       @     ensures \result == ((numerator + 1) / denominator) - 1;
       @*/  
-    private /*@ spec_public pure @*/ static final
-        long floorDivide(long numerator, long denominator);
+    //@ public model pure static final long floorDivide(long numerator, long denominator);
 
     /*@ private normal_behavior
       @     old int year = internalGet(YEAR);
@@ -1113,73 +1117,72 @@ public class GregorianCalendar extends Calendar {
       @          ensures \result == MONTH_LENGTH[month];
       @     |}
       @*/ 
-    private /*@ spec_public pure @*/ final int monthLength(int month);
+    private /*@ spec_public pure */ final int monthLength(int month);
 
-    /*@ private normal_behavior
-      @     requires (\forall int field; 0 <= field && field < FIELD_COUNT; 
-      @                field != DATE && field != DAY_OF_YEAR
-      @                && isSet(field)
-      @                && !boundsCheck(internalGet(field), field));
-      @     assignable \nothing;
-      @     ensures \result == false;
-      @ also
-      @  private normal_behavior
-      @     requires (\forall int field; 0 <= field && field < FIELD_COUNT; 
-      @                field == DATE || field == DAY_OF_YEAR
-      @                || !isSet(field)
-      @                || boundsCheck(internalGet(field), field));
-      @     assignable \nothing;
-      @     ensures \result == true;
-      @ also
-      @  private normal_behavior
-      @     requires stamp[DATE] >= MINIMUM_USER_STAMP
-      @              && (get(DATE) < getMinimum(DATE) 
-      @                  || get(DATE) > monthLength(get(MONTH)));
-      @     assignable \nothing;
-      @     ensures \result == false;
-      @ also
-      @  private normal_behavior
-      @     requires stamp[DATE] < MINIMUM_USER_STAMP
-      @              || (get(DATE) >= getMinimum(DATE) 
-      @                  && get(DATE) <= monthLength(get(MONTH)));
-      @     assignable \nothing;
-      @     ensures \result == true;
-      @ also
-      @  private normal_behavior
-      @     requires stamp[DAY_OF_YEAR] >= MINIMUM_USER_STAMP
-      @              && (get(DAY_OF_YEAR) < 1 
-      @                  || get(DAY_OF_YEAR) > yearLength());
-      @     assignable \nothing;
-      @     ensures \result == false;
-      @ also
-      @  private normal_behavior
-      @     requires stamp[DAY_OF_YEAR] < MINIMUM_USER_STAMP
-      @              || (get(DAY_OF_YEAR) >= 1 
-      @                  && get(DAY_OF_YEAR) <= yearLength());
-      @     assignable \nothing;
-      @     ensures \result == true;
-      @ also
-      @  private normal_behavior
-      @     requires isSet(DAY_OF_WEEK_IN_MONTH)
-      @              && 0 == internalGet(DAY_OF_WEEK_IN_MONTH);
-      @     assignable \nothing;
-      @     ensures \result == false;
-      @ also
-      @  private normal_behavior
-      @     requires !isSet(DAY_OF_WEEK_IN_MONTH)
-      @              || 0 != internalGet(DAY_OF_WEEK_IN_MONTH);
-      @     assignable \nothing;
-      @     ensures \result == true;
-      @*/
-    private /*@ spec_public pure @*/ boolean validateFields();
+//    /*@ private normal_behavior
+//      @     requires (\forall int field; 0 <= field && field < FIELD_COUNT; 
+//      @                field != DATE && field != DAY_OF_YEAR
+//      @                && isSet(field)
+//      @                && !boundsCheck(internalGet(field), field));
+//      @     assignable \nothing;
+//      @     ensures \result == false;
+//      @ also
+//      @  private normal_behavior
+//      @     requires (\forall int field; 0 <= field && field < FIELD_COUNT; 
+//      @                field == DATE || field == DAY_OF_YEAR
+//      @                || !isSet(field)
+//      @                || boundsCheck(internalGet(field), field));
+//      @     assignable \nothing;
+//      @     ensures \result == true;
+//      @ also
+//      @  private normal_behavior
+//      @     requires stamp[DATE] >= MINIMUM_USER_STAMP
+//      @              && (get(DATE) < getMinimum(DATE) 
+//      @                  || get(DATE) > monthLength(get(MONTH)));
+//      @     assignable \nothing;
+//      @     ensures \result == false;
+//      @ also
+//      @  private normal_behavior
+//      @     requires stamp[DATE] < MINIMUM_USER_STAMP
+//      @              || (get(DATE) >= getMinimum(DATE) 
+//      @                  && get(DATE) <= monthLength(get(MONTH)));
+//      @     assignable \nothing;
+//      @     ensures \result == true;
+//      @ also
+//      @  private normal_behavior
+//      @     requires stamp[DAY_OF_YEAR] >= MINIMUM_USER_STAMP
+//      @              && (get(DAY_OF_YEAR) < 1 
+//      @                  || get(DAY_OF_YEAR) > yearLength());
+//      @     assignable \nothing;
+//      @     ensures \result == false;
+//      @ also
+//      @  private normal_behavior
+//      @     requires stamp[DAY_OF_YEAR] < MINIMUM_USER_STAMP
+//      @              || (get(DAY_OF_YEAR) >= 1 
+//      @                  && get(DAY_OF_YEAR) <= yearLength());
+//      @     assignable \nothing;
+//      @     ensures \result == true;
+//      @ also
+//      @  private normal_behavior
+//      @     requires isSet(DAY_OF_WEEK_IN_MONTH)
+//      @              && 0 == internalGet(DAY_OF_WEEK_IN_MONTH);
+//      @     assignable \nothing;
+//      @     ensures \result == false;
+//      @ also
+//      @  private normal_behavior
+//      @     requires !isSet(DAY_OF_WEEK_IN_MONTH)
+//      @              || 0 != internalGet(DAY_OF_WEEK_IN_MONTH);
+//      @     assignable \nothing;
+//      @     ensures \result == true;
+//      @*/
+     //@ model public pure boolean validateFields();
     
-    /*@ private normal_behavior
-      @     assignable \nothing;
-      @     ensures \result == (getMinimum(field) <= value
-      @                         && value <= getMaximum(field));
-      @*/
-    private /*@ spec_public pure @*/ final
-        boolean boundsCheck(int value, int field);
+//    /*@ private normal_behavior
+//      @     assignable \nothing;
+//      @     ensures \result == (getMinimum(field) <= value
+//      @                         && value <= getMaximum(field));
+//      @*/
+    //@ model public pure final method boolean boundsCheck(int value, int field);
     
     /*@ private normal_behavior
       @     requires isSet(ERA);

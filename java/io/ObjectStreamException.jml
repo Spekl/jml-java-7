@@ -1,14 +1,14 @@
 package java.io;
  
-public class ObjectStreamException extends IOException {
+abstract public class ObjectStreamException extends IOException {
   
-    /*@ public normal_behavior
+    /*@ protected normal_behavior
       @   ensures standardThrowable();
       @*/
     //@ pure
     protected ObjectStreamException();
   
-    /*@ public normal_behavior
+    /*@ protected normal_behavior
       @   ensures standardThrowable(s);
       @*/
     //@ pure

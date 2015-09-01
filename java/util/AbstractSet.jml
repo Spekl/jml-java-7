@@ -1,5 +1,3 @@
-// @(#)$Id$
-
 // Copyright (C) 2003 Iowa State University
 
 // This file is part of JML
@@ -23,9 +21,9 @@ package java.util;
 /** JML's specification of java.util.AbstractSet.
  * @author Katie Becker
  */
-public abstract class AbstractSet
-  extends AbstractCollection
-  implements Set
+public abstract class AbstractSet<E>
+  extends AbstractCollection<E>
+  implements Set<E>
 {
     /*@ public normal_behavior
       @   ensures \result <==> (initialCollection() && initialSet());
@@ -39,12 +37,12 @@ public abstract class AbstractSet
     protected AbstractSet();
 
     // specified by Set
-    public boolean equals(/*@nullable*/Object o);
+    public boolean equals(Object o);
 
     // specified by Collection
     public int hashCode();
 
     // specified by Set
-    public boolean removeAll(Collection c);
+    public boolean removeAll(Collection<?> c);
 
 }

@@ -18,7 +18,7 @@ package java.lang;
 import java.util.Random;
 
 /** 
- * JML specification for java.lang.Math in Java 1.4.
+ * JML specification for java.lang.Math in J2SE 5.0.
  *
  * @version OpenJML 1.0
  * @author Brandon Shilling
@@ -211,6 +211,31 @@ public /*@ pure @*/ final class Math {
       @*/
     public static /*@ pure @*/ double log(double a);
 
+    // new for Java 5
+    // the calculation of log10 should be exact for integral powers of 10
+    // between -6 and 23, based on the characteristics of IEEE double-
+    // precision arithmetic
+    /*@ public normal_behavior
+      @ {|
+      @   requires Double.isNaN(a) || a < 0.0;
+      @   ensures Double.isNaN(\result);
+      @ also
+      @   requires a == Double.POSITIVE_INFINITY;
+      @   ensures \result == Double.POSITIVE_INFINITY;
+      @ also
+      @   requires a == 0.0;  // positive or negative zero
+      @   ensures \result == Double.NEGATIVE_INFINITY;
+      @ also
+      @   requires a != Double.POSITIVE_INFINITY;
+      @   ensures (\forall int n; -6 < n && n < 23; 
+      @            a == pow(10, n) ==> \result == n);
+      @ also
+      @   requires a >= 0.0 && a < Double.POSITIVE_INFINITY;
+      @   ensures (* result within 1 ulp of exact result *);
+      @ |}
+      @*/
+    public static /*@ pure @*/ double log10(double a);
+        
     /*@ public normal_behavior
       @ {|
       @   requires Double.isNaN(a) || a < 0.0;
@@ -231,6 +256,30 @@ public /*@ pure @*/ final class Math {
       @*/
     public static /*@ pure @*/ double sqrt(double a);
 
+    // new for Java 5
+    /*@ public normal_behavior
+      @ {|
+      @   requires Double.isNaN(a);
+      @   ensures Double.isNaN(\result);
+      @ also
+      @   requires a == Double.POSITIVE_INFINITY;
+      @   ensures \result == Double.POSITIVE_INFINITY;
+      @ also
+      @   requires a == Double.NEGATIVE_INFINITY;
+      @   ensures \result == Double.NEGATIVE_INFINITY;
+      @ also
+      @   requires isPositiveZero(a);
+      @   ensures isPositiveZero(\result);
+      @ also
+      @   requires isNegativeZero(a);
+      @   ensures isNegativeZero(\result);
+      @ also
+      @	  requires a > 0.0 && a < Double.POSITIVE_INFINITY;
+      @   ensures close(a, \result * \result * \result, 3.0E-16);
+      @ |}
+      @*/
+    public static /*@ pure @*/ double cbrt(double a);
+    
     /*@ public normal_behavior
       @ {|
       @   requires Double.isNaN(f1) || Double.isNaN(f2) 
@@ -671,6 +720,197 @@ public /*@ pure @*/ final class Math {
       @ |}
       @*/
     public static /*@ pure @*/ double min(double a, double b);
+    
+    // new for Java 5
+    /*@ public normal_behavior
+      @ {|
+      @   requires Double.isNaN(d);
+      @   ensures Double.isNaN(\result);
+      @ also
+      @   requires !isFinite(d);
+      @   ensures \result == Double.POSITIVE_INFINITY;
+      @ also
+      @   requires d == 0.0;
+      @   ensures \result == Double.MIN_VALUE;
+      @ also
+      @   requires abs(d) == Double.MAX_VALUE;
+      @   ensures \result == pow(2, 971);
+      @ also 
+      @   requires isFinite(d);
+      @   ensures Double.MIN_VALUE <= \result && \result <= pow(2, 971);
+      @ |}
+      @*/
+    public static /*@ pure @*/ double ulp(double d);
+    
+    // new for Java 5
+    /*@ public normal_behavior
+      @ {|
+      @   requires Float.isNaN(f);
+      @   ensures Float.isNaN(\result);
+      @ also
+      @   requires !isFinite(f);
+      @   ensures \result == Float.POSITIVE_INFINITY;
+      @ also
+      @   requires f == 0.0;
+      @   ensures \result == Float.MIN_VALUE;
+      @ also
+      @   requires abs(f) == Float.MAX_VALUE;
+      @   ensures \result == pow(2, 104);
+      @ also 
+      @   requires isFinite(f);
+      @   ensures Float.MIN_VALUE <= \result && \result <= pow(2, 104);
+      @ |}
+      @*/
+    public static /*@ pure @*/ float ulp(float f);    
+    
+    // new for Java 5
+    /*@ public normal_behavior
+      @ {|
+      @   requires Double.isNaN(d);
+      @   ensures Double.isNaN(\result);
+      @ also
+      @   requires d == 0.0;
+      @   ensures \result == d;
+      @ also
+      @   requires d < 0.0;
+      @   ensures \result == -1.0;
+      @ also
+      @   requires 0.0 < d;
+      @   ensures \result == 1.0;
+      @ |}
+      @*/
+    public static /*@ pure @*/ double signum(double d);
+    
+    // new for Java 5
+    /*@ public normal_behavior
+      @ {|
+      @   requires Float.isNaN(f);
+      @   ensures Float.isNaN(\result);
+      @ also
+      @   requires f == 0.0;
+      @   ensures \result == f;
+      @ also
+      @   requires f < 0.0;
+      @   ensures \result == -1.0;
+      @ also
+      @   requires 0.0 < f;
+      @   ensures \result == 1.0;
+      @ |}
+      @*/
+    public static /*@ pure @*/ float signum(float f);
+        
+    // new for Java 5
+    /*@ public normal_behavior
+      @ {|
+      @   requires Double.isNaN(x);
+      @   ensures Double.isNaN(\result);
+      @ also
+      @   requires !isFinite(x) || x == 0.0;
+      @   ensures \result == x;
+      @ also
+      @   requires isFinite(x);
+      @   ensures (* result within 2.5 ulps of exact result *);
+      @ |}
+      @*/
+    public static /*@ pure @*/ double sinh(double x);
+    
+    // new for Java 5
+    /*@ public normal_behavior
+      @ {|
+      @   requires Double.isNaN(x);
+      @   ensures Double.isNaN(\result);
+      @ also
+      @   requires !isFinite(x);
+      @   ensures \result == Double.POSITIVE_INFINITY;
+      @ also
+      @   requires x == 0.0;
+      @   ensures \result == 1.0;
+      @ also
+      @   requires isFinite(x);
+      @   ensures (* result within 2.5 ulps of exact result *);
+      @ |}
+      @*/
+    public static /*@ pure @*/ double cosh(double x);
+    
+     // new for Java 5
+    /*@ public normal_behavior
+      @ {|
+      @   requires Double.isNaN(x);
+      @   ensures Double.isNaN(\result);
+      @ also
+      @   requires x == 0.0;
+      @   ensures \result == x;
+      @ also
+      @   requires x == Double.POSITIVE_INFINITY;
+      @   ensures \result == 1.0;
+      @ also
+      @   requires x == Double.NEGATIVE_INFINITY;
+      @   ensures \result == -1.0;
+      @ also
+      @   requires isFinite(x);
+      @   ensures abs(\result) <= 1.0;
+      @   ensures (* result within 2.5 ulps of exact result *);
+      @ |}
+      @*/
+    public static /*@ pure @*/ double tanh(double x);
+           
+    // new for Java 5
+    /*@ public normal_behavior
+      @ {|
+      @   requires !isFinite(x) || !isFinite(y);
+      @   ensures \result == Double.POSITIVE_INFINITY;
+      @ also
+      @   requires Double.isNaN(x) || Double.isNaN(y);
+      @   ensures Double.isNaN(\result);
+      @ also
+      @   requires isFinite(x) && isFinite(y);
+      @   ensures (* result within 1 ulp of exact result *);
+      @ |}
+      @*/
+    public static /*@ pure @*/ double hypot(double x, double y);
+    
+    // new for Java 5
+    /*@ public normal_behavior
+      @ {|
+      @   requires Double.isNaN(x);
+      @   ensures Double.isNaN(\result);
+      @ also
+      @   requires x == Double.POSITIVE_INFINITY;
+      @   ensures \result == Double.POSITIVE_INFINITY;
+      @ also
+      @   requires x == Double.NEGATIVE_INFINITY;
+      @   ensures \result == -1.0;
+      @ also
+      @   requires x == 0.0;
+      @   ensures \result == x;
+      @ also
+      @   requires isFinite(x);
+      @   ensures (* result within 1 ulp of exact result *);
+      @   ensures -1.0 <= \result;
+      @ |}
+      @*/
+    public static /*@ pure @*/ double expm1(double x);
+    
+    // new for Java 5
+    /*@ public normal_behavior
+      @ {|
+      @   requires Double.isNaN(x) || x < -1.0;
+      @   ensures Double.isNaN(\result);
+      @ also
+      @   requires x == Double.POSITIVE_INFINITY;
+      @   ensures \result == Double.POSITIVE_INFINITY;
+      @ also
+      @   requires x == -1.0;
+      @   ensures \result == Double.NEGATIVE_INFINITY;
+      @ also
+      @   requires x == 0.0;
+      @   ensures \result == x;
+      @ also
+      @   requires isFinite(x);
+      @   ensures (* result within 1 ulp of exact result *);
+      @ |}
+      @*/
+    public static /*@ pure @*/ double log1p(double x);
     
     // model methods to help make some of the special cases
     // easier to deal with

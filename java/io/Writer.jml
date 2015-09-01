@@ -2,7 +2,7 @@
 
 package java.io;
 
-public abstract class Writer extends Object {
+public abstract class Writer extends Object implements Appendable, Closeable, Flushable {
 
     protected /*@non_null*/Object lock;
 

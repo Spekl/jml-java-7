@@ -20,9 +20,11 @@
 
 package java.lang;
 
+//This class changes from 1.4 in that TYPE is generic
+
 public final class Void extends java.lang.Object {
 
-    public static final java.lang.Class TYPE;
-    //@ initially TYPE == \type(void);
-    //@ invariant_redundantly TYPE == void.class;
+    public static final java.lang.Class<Void> TYPE;  // 1.5 DIFFERENCE
+    //@ public initially TYPE == void.class;
+    //@ public invariant_redundantly TYPE == void.class;
 }

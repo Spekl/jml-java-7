@@ -3,6 +3,8 @@
 
 package java.io;
 
+// 1.5 Changes: added additional synchronized modifiers
+
 public class ByteArrayOutputStream extends java.io.OutputStream {
 
     // FIELDS
@@ -24,7 +26,7 @@ public class ByteArrayOutputStream extends java.io.OutputStream {
     /*@
       @ 
       @*/
-    public int size();
+    public synchronized int size();  // CHANGED IN 1.5
 
     /*@
       @ 
@@ -61,16 +63,16 @@ public class ByteArrayOutputStream extends java.io.OutputStream {
     /*@
       @ 
       @*/
-    public java.lang.String toString();
+    public synchronized java.lang.String toString();  // CHANGED IN 1.5
 
     /*@
       @ 
       @*/
-    public java.lang.String toString(int Param0);
+    public synchronized java.lang.String toString(int Param0);  // CHANGED IN 1.5
 
     /*@
       @ 
       @*/
-    public java.lang.String toString(java.lang.String Param0)
+    public synchronized java.lang.String toString(java.lang.String Param0)  // CHANGED IN 1.5
         throws java.io.UnsupportedEncodingException;
 }

@@ -20,7 +20,7 @@
 
 package java.util;
 
-public abstract class AbstractCollection implements Collection {
+public abstract class AbstractCollection<E> implements Collection<E> {
 
     /*@ public normal_behavior
       @   ensures \result <==> initialCollection();
@@ -36,7 +36,7 @@ public abstract class AbstractCollection implements Collection {
     // Query Operations
 
     // specification inherited from Collection
-    public abstract /*@ pure @*/ Iterator iterator();
+    public abstract /*@ pure @*/ Iterator<E> iterator();
 
     // specification inherited from Collection
     public abstract /*@ pure @*/ int size();
@@ -45,35 +45,35 @@ public abstract class AbstractCollection implements Collection {
     public /*@ pure @*/ boolean isEmpty();
 
     // specification inherited from Collection
-    public /*@ pure @*/ boolean contains(/*@nullable*/Object o);
+    public /*@ pure @*/ boolean contains(Object o);
 
     // specification inherited from Collection
     public /*@ pure @*/ Object[] toArray();
 
     // specification inherited from Collection
-    public Object[] toArray(Object[] a);
+    public <T> T[] toArray(T[] a);
 
     // Modification Operations
 
     // specification inherited from Collection
-    public boolean add(/*@nullable*/Object o);
+    public boolean add(E o);
 
     // specification inherited from Collection
-    public boolean remove(/*@nullable*/Object o);
+    public boolean remove(Object o);
 
     // Bulk Operations
 
     // specification inherited from Collection
-    public /*@ pure @*/ boolean containsAll(Collection c);
+    public /*@ pure @*/ boolean containsAll(Collection<?> c);
 
     // specification inherited from Collection
-    public boolean addAll(Collection c);
+    public boolean addAll(Collection<? extends E> c);
 
     // specification inherited from Collection
-    public boolean removeAll(Collection c);
+    public boolean removeAll(Collection<?> c);
 
     // specification inherited from Collection
-    public boolean retainAll(Collection c);
+    public boolean retainAll(Collection<?> c);
 
     // specification inherited from Collection
     public void clear();

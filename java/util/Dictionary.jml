@@ -1,73 +1,26 @@
 package java.util;
 
-import java.util.Enumeration;
-//@ model import org.jmlspecs.models.JMLObjectToObjectMap;
+public abstract class Dictionary<K,V> {
 
-/** JML's specification of Dictionary.
- * @author Michael Lopez and Gary T. Leavens
- */
-public abstract class Dictionary {
-    //@ public ghost \TYPE keyType = \type(Object);
-    //@ public ghost \TYPE elementType = \type(Object);
-
-    //@ public model JMLObjectToObjectMap mapping;
-
-    //@ assignable mapping;
-    //@ ensures mapping.isEmpty();
     //@ pure
     public Dictionary();
 
-    //@ ensures \result == mapping.int_size();
-    //@ pure
+    //@ modifies \nothing;
     public abstract int size();
 
-    //@ ensures \result == mapping.isEmpty();
-    //@ pure
-    public abstract  boolean isEmpty();
+    //@ modifies \nothing;
+    public abstract boolean isEmpty();
 
+    //@ modifies \nothing;
+    public abstract /*@non_null*/ Enumeration<K> keys();
 
-    //@ ensures \result == mapping.domainElements();
-    // if there is no keys in the dictionary, return empty enum
-    //@ pure
-    public abstract /*@ non_null @*/ Enumeration keys();
+    //@ modifies \nothing;
+    public abstract /*@non_null*/ Enumeration<V> elements();
 
+    //@ modifies \nothing;
+    public abstract /*@nullable*/ V get(/*@non_null*/ Object key);
 
-    //@ ensures \result == mapping.rangeElements();
-    //@ pure
-    public abstract /*@ non_null @*/ Enumeration elements();
+    public abstract /*@nullable*/ V put(/*@non_null*/ K key, /*@non_null*/ V value);
 
-
-    /*@   requires key != null && mapping.isDefinedAt(key);
-      @   ensures \result == mapping.apply(key);
-      @ also
-      @   requires key != null && !mapping.isDefinedAt(key);
-      @   ensures \result == null;
-      @*/
-    //@ pure
-    public abstract /*@ nullable @*/ Object get(/*@ non_null @*/ Object key);
-
-
-    /*@   requires key != null && value != null && mapping.isDefinedAt(key);
-      @   ensures \result == \old(mapping.apply(key));
-      @   assignable mapping;
-      @   ensures mapping.apply(key) == value;
-      @ also
-      @   requires key != null && value != null && !mapping.isDefinedAt(key); 
-      @   assignable mapping;
-      @   ensures mapping.apply(key) == value && \result == null;
-      @*/
-    public abstract /*@ nullable @*/ Object put(/*@ non_null @*/ Object key, /*@ non_null @*/ Object value);
-
-
-    /*@   requires key != null && mapping.isDefinedAt(key);
-      @   assignable mapping;
-      @   ensures \result == mapping.apply(key);
-      @   ensures !mapping.isDefinedAt(key);
-      @ also
-      @   requires key != null && !mapping.isDefinedAt(key);
-      @   assignable mapping;
-      @   ensures \result == null;
-      @   ensures !mapping.isDefinedAt(key);
-      @*/
-    public abstract /*@ nullable @*/ Object remove(/*@ non_null @*/ Object key);
+    public abstract /*@nullable*/ V remove(/*@non_null*/ Object key);
 }

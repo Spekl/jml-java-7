@@ -41,7 +41,7 @@ import java.lang.NullPointerException;
  * @author Katie Becker
  * @author Gary T. Leavens
  */
-public final class URI implements Comparable, Serializable {
+public final class URI implements Comparable<URI>, Serializable {
 
     // CLASS SPECIFICATIONS
 
@@ -287,7 +287,7 @@ public final class URI implements Comparable, Serializable {
     /*@
       @ 
       @*/
-    public int compareTo(Object ob);
+    public int compareTo(URI ob);
 
     /*@
       @ 

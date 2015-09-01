@@ -41,7 +41,7 @@ public final class String
 {
     // NOTE: The value of the String is modeled by the charArray in CharSequence
 
-    public static final Comparator CASE_INSENSITIVE_ORDER;
+    public static final Comparator<String> CASE_INSENSITIVE_ORDER;
 
     //---------------------------------------------------------------------
     // Constructors (and their helpers)
@@ -158,7 +158,7 @@ public final class String
     // functionality in java.nio.charset.CharSet.
     //@ public static pure model boolean supportedEncoding(String charsetName);
 
-    /*@ public behavior
+    /*+ESC@ public behavior
       @  requires bytes != null && charsetName != null
       @             && 0 <= offset 
       @             && (offset + length) <= bytes.length
@@ -269,23 +269,16 @@ public final class String
       @   ensures \result == s.charArray.length;
       @
       @ //-@ function
-      @ public static model pure int length(String s);
+      @ public static model pure helper int length(String s);
       @*/
-
     // inherits specs from CharSequence - \result == charArray.length
-    /*@ also public normal_behavior
-      @   ensures \result == length(this);
-      @*/
-    public /*@ pure @*/ int length();
+    public /*@ pure helper @*/ int length();
 
-    // This should be derivable, but the relevant formulae are not always triggered
-    //@ axiom (\forall String s,ss; s.equals(ss) ==>s.length() == ss.length());
-
-    /*@ also public normal_behavior
-      @   requires 0 <= index && index < charArray.length;
-      @   ensures \result == charArray[index];
-      @ also
-      @  public exceptional_behavior
+    /*@ // Inherited from CharSequence:
+      @ //also public normal_behavior
+      @ //  requires 0 <= index && index < charArray.length;
+      @ //  ensures \result == charArray[index];
+      @ also public exceptional_behavior
       @   requires index < 0 || index >= charArray.length;
       @   signals_only StringIndexOutOfBoundsException;
       @*/
@@ -390,7 +383,7 @@ public final class String
       @   ensures \result <==> (s1 == s2);
       @
       @ pure //-@ function
-      @ public static model boolean equals(nullable String s1, nullable String s2);
+      @ public static helper model boolean equals(nullable String s1, nullable String s2);
       @*/
 
     //@ axiom (\forall String s,ss; equals(s,ss) ==> s.length() == ss.length());
@@ -401,16 +394,13 @@ public final class String
 
     /*@ also public normal_behavior
       @   requires anObject != null && (anObject instanceof String);
-      @   ensures \result == equals(this,(String)anObject);
+      @   // ensures \result == equals(this,(String)anObject); // FIXME - causes many straightforward proofs to be incomplete
       @ also public normal_behavior
-      @   requires this == anObject;
-      @   ensures \result;
-      @ also public normal_behavior
-      @   requires anObject == null || !(anObject instanceof String);
+      @   requires !(anObject instanceof String);
       @   ensures !\result;
       @
       @*/
-    public /*@ pure @*/ boolean equals(/*@nullable*/Object anObject);
+    public /*@ pure @*/ boolean equals(/*@ nullable */ Object anObject);
 
     /*@ public normal_behavior
       @   requires sb != null;
@@ -438,23 +428,29 @@ public final class String
       public static pure model
           boolean charLessIgnoreCase(char c1, char c2); @*/
 
+    // FIXME - the first case is too complicated for ESC
     /*@  public normal_behavior
       @   requires anotherString != null;
-      @   ensures equals(this,anotherString) ==> \result;
-      @   ensures \result <==> (length() == anotherString.length())
-      @                        && (\forall int i;
-      @                             0 <= i && i < this.length();
-      @                              charEqualsIgnoreCase(
-      @                                   charAt(i),
-      @                                   anotherString.charAt(i)));
+//      @   ensures equals(this,anotherString) ==> \result;
+//      @   ensures \result <==> (length() == anotherString.length())
+//      @                        && (\forall int i;
+//      @                             0 <= i && i < this.length();
+//      @                              charEqualsIgnoreCase(
+//      @                                   charAt(i),
+//      @                                   anotherString.charAt(i)));
       @ also
+      @ public normal_behavior
       @   requires anotherString == null;
       @   ensures !\result;
+      @ also public normal_behavior
+      @   requires anotherString == this;
+      @   ensures \result;
       @*/
     //-@ function
     public /*@ pure @*/ boolean equalsIgnoreCase(String anotherString);
 
-    /*@  public normal_behavior
+    // FIXME - overly complicated for esc?
+    /* @  public normal_behavior
       @   requires s1 != null && s2 != null;
       @   {|
       @     requires s2.length == 0 && s1.length == 0;
@@ -469,13 +465,14 @@ public final class String
       @     requires s1.length > 0 && s2.length > 0 && s1[0] != s2[0];
       @     ensures \result == (s1[0] < s2[0]);
       @   also
-      @     ensures \result == (
-      @               (\exists int i; 0 <= i && i < s1.length && i < s2.length;
-      @                        s1[i] < s2[i] && equal(s1,0,s2,0,i))
-      @               || 
-      @                 (s1.length < s2.length && equal(s1,0,s2,0,s1.length))
-      @               );
+//      @     ensures \result == (
+//      @               (\exists int i; 0 <= i && i < s1.length && i < s2.length;
+//      @                        s1[i] < s2[i] && equal(s1,0,s2,0,i))
+//      @               || 
+//      @                 (s1.length < s2.length && equal(s1,0,s2,0,s1.length))
+//      @               );
       @   |}
+      @*//*@
     public static pure model boolean lessThan(char[] s1,
                                               char[] s2);  @*/
 
@@ -528,17 +525,6 @@ public final class String
       @   |}
       @*/
     public /*@ pure @*/ int compareTo(String anotherString);
-
-    /*@ also
-      @   public normal_behavior
-      @     requires o != null && (o instanceof String);
-      @     ensures \result == compareTo((String) o);
-      @ also
-      @   public exceptional_behavior
-      @     requires o == null || !(o instanceof String);
-      @     signals_only ClassCastException;
-      @*/
-    public /*@ pure @*/ int compareTo(Object o);
 
 
     /*@  public normal_behavior
@@ -810,63 +796,20 @@ public final class String
     public /*@ pure @*/ CharSequence subSequence(int beginIndex,
                                                    int endIndex);
 
-    /*@ public normal_behavior
-      @   requires s != null && ss != null;
-      @   ensures equal(\result.charArray,0,s.charArray,0,s.length());
-      @   ensures equal(\result.charArray,s.length(),ss.charArray,0,ss.length());
-      @
-      @ //-@ function
-      @ public static pure model non_null
-      @                                 String concat(String s, String ss);
-      @
-      @
-      @ public normal_behavior
-      @   ensures \result == (s == null ? "null" : s) ;
-      @
-      @ //-@  function
-      @ model static public pure non_null String nonnull(nullable String s);
-      @
-      @
-      @ public normal_behavior
-      @   assignable \nothing;
-      @   ensures \result != null;
-      @   ensures \fresh(\result);
-      @   ensures !isInterned(\result);
-      @   ensures \result.equals( concat(nonnull(s),nonnull(ss)));
-      @
-      @ //-@ function
-      @ model static public non_null pure String 
-      @                                  _infixConcat_(nullable String s, nullable String ss);
-      @*/
- 
 
-    /*@ public normal_behavior
-      @   requires str != null;
-      @   {|
-      @   requires str.length() != 0;
-      @   assignable \nothing;
-      @   ensures \result != null
-      @            && \fresh(\result)
-      @            && !isInterned(\result)
-      @            && \result.equals(concat(this,str));
-      @   also
-      @   requires str.length() == 0;
-      @   assignable \nothing;
-      @   ensures \result != null
-      @            && \result == this
-      @            && \result.length() == length();
-      @   |}
-      @ also public exceptional_behavior
-      @    requires str == null;
-      @   assignable \nothing;
-      @    signals_only NullPointerException;
-      @*/
-    public /*@ pure @*/ /*@ non_null @*/ String concat(String str);
+    //@ public model static pure non_null String concat(String s1, String s2);
+
+    /** This is the method version of the infix + operation */
+    //@ public normal_behavior
+    //@     requires str == null; 
+    //@ also public normal_behavior
+    //@     requires str != null; 
+    //-RAC@ ensures \result.equals(concat(this,str));
+    public /*@ pure @*/ /*@ non_null @*/ String concat(/*@ nullable */ String str);
 
     /*@  public normal_behavior
-      @   ensures \result != null
-      @            && \result.length() == length()
-      @            && \fresh(\result)
+      @   ensures \result.charArray.owner == \result;
+      @   ensures \result.length() == length()
       @            && (\forall int i; 0 <= i && i < length();
       @                  \result.charAt(i) 
       @                     == ((charAt(i) == oldChar) ? newChar : charAt(i)));
@@ -984,7 +927,7 @@ public final class String
       @  also public normal_behavior
       @    requires obj instanceof String;
       @    ensures \result.equals(obj);   // \result == obj ??? FIXME
-      @  also public behavior
+      @*//*-RAC@  also public behavior
       @    requires obj != null;
       @    ensures equals(\result,obj.theString); 
       @*/
@@ -1085,15 +1028,12 @@ public final class String
       @   ensures equals(\result,this);
       @   ensures isInterned(this) ==> (\result == this);
       @*/
-    //@ pure // -@ function
+    //@ pure
     public native /*@ non_null @*/ String intern();
 
     //@ public normal_behavior
-    //+@    ensures \result <==> (s != null && (* \dttfsa(boolean,"|interned:|",s) *));
-    //-@    ensures \result <==> (s != null && \dttfsa(boolean,"|interned:|",s));
+    //@   ensures true; // No restriction on result
     //-@ function
-    //@ public pure static model boolean isInterned(String s);
-
-    //-@ axiom (\forall int i,k; length(\dttfsa(java.lang.String,"|intern:|",i,k)) == k);
+    //@ public pure helper static model boolean isInterned(non_null String s);
     
 }

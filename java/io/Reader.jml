@@ -2,7 +2,7 @@
 
 package java.io;
 
-public abstract class Reader extends Object {
+public abstract class Reader extends Object implements Readable, Closeable {
 
     //private static final int maxSkipBufferSize;
     /*@ spec_public */ protected Object lock;

@@ -36,7 +36,7 @@ import java.lang.ref.SoftReference;
 
 public class Date implements java.io.Serializable, Cloneable, Comparable {
     //@ public model Calendar cal;
-    //@ public model long fastTime;
+    private /*@ spec_public */ transient long fastTime;
     
     /*@ public normal_behavior
        @   assignable \nothing;
@@ -140,28 +140,16 @@ public class Date implements java.io.Serializable, Cloneable, Comparable {
     public void setTime(long time);
 
     /*@ public normal_behavior
-       @   requires when != null &&
-       @            this.getTime() < when.getTime();
+       @   requires when != null;
        @   assignable \nothing;
-       @   ensures \result == true;
-       @ also
-       @ public normal_behavior
-       @   requires when != null &&
-       @            this.getTime() >= when.getTime();
-       @   ensures \result == false;
+       @   ensures \result == (this.getTime() < when.getTime());
        @*/
     public /*@ pure @*/ boolean before(Date when);
 
     /*@ public normal_behavior
-       @   requires when != null &&
-       @            this.getTime() > when.getTime();
+       @   requires when != null;
        @   assignable \nothing;
-       @   ensures \result == true;
-       @ also
-       @ public normal_behavior
-       @   requires when != null &&
-       @            this.getTime() <= when.getTime();
-       @   ensures \result == false;
+       @   ensures \result == (this.getTime() > when.getTime());
        @*/
     public /*@ pure @*/ boolean after(Date when);
     
@@ -173,7 +161,7 @@ public class Date implements java.io.Serializable, Cloneable, Comparable {
        @   ensures obj instanceof Date &&
        @           \result == (this.getTime() == date.getTime());
        @*/
-    public /*@ pure @*/ boolean equals(/*@ nullable \readonly @*/ Object obj);
+    public /*@ pure @*/ boolean equals(Object obj);
 
     /*@ public normal_behavior
        @   requires anotherDate != null && this.before(anotherDate);
@@ -192,13 +180,13 @@ public class Date implements java.io.Serializable, Cloneable, Comparable {
        @*/
     public /*@ pure @*/ int compareTo(Date anotherDate);
 
-    /*@ also
-       @ public normal_behavior
-       @   requires o != null && o instanceof Date;
-       @   assignable \nothing;
-       @   ensures \result  == compareTo((Date) o);
-       @*/
-    public /*@ pure @*/ int compareTo(Object o);
+//    /*@ also
+//       @ public normal_behavior
+//       @   requires o != null && o instanceof Date;
+//       @   assignable \nothing;
+//       @   ensures \result  == compareTo((Date) o);
+//       @*/
+//    public /*@ pure @*/ int compareTo(Object o);
 
     // Specification is inherited
     public int hashCode();
