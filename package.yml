@@ -1,10 +1,47 @@
-name        : jml-java-6          # name of the package
-version     : 1.6-2               # version of the package
-kind        : spec                # one of tool or spec(s)
-description : JML Specifications for the Java Language, Version 6.
-extends     : jml-java-5              
+name        : jml-java-7          # name of the package
+version     : 1.7-1       # version of the package
+kind        : spec                     # one of tool or spec(s)
+description : JML Specifications for the Java Language, Version 7/
+extends     : jml-java-6              
 author:
   - name: John L. Singleton
     email: jsinglet@gmail.com
 
 
+# a list of the named and versioned packages that must be installed before
+# installing 
+# depends:                               
+#   - package   : other-package   # represents a package that MUST be installed
+#     version   : 1.1.1
+#     platform  : all 
+#   - package   : other-package
+#     version   : 1.1.1
+#   - one-of:                     # at least one of these must be installed  
+#       - package: z3
+#         version: 1.1.2
+#         platform: all
+#       - package: why3
+#         version: 1.1.2
+#         platform: all
+
+#
+# assets that make up THIS package
+#
+
+# assets:
+#     - asset   : MAIN
+#       url     : http://www.openjml.org/downloads/1.1.2.tar.gz  
+#       platform: all
+        
+# assumes:
+#   - cmd: java --version # right now just support cmd -- maybe file exists?
+#     contains: 1.7
+#     message: "Sorry, but this package requires Java, version 1.7 or higher."
+
+
+# downloads everything to the .
+# install:
+#   - cmd: tar zxvf $MAIN
+#     platform: all
+#   - cmd: tar zxvf $MAIN
+#     platform: windows
