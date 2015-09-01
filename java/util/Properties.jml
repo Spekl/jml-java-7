@@ -36,7 +36,7 @@ public class Properties extends Hashtable{
 
     public synchronized void save(java.io.OutputStream out, String s);
 
-    public synchronized void store(java.io.OutputStream out, String s)
+    public void store(java.io.OutputStream out, String s)  // CHANGED IN 1.6
        throws java.io.IOException;
 
 

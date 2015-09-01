@@ -22,6 +22,7 @@ package java.math;
 
 import java.util.Random;
 
+// FIXME
 /** JML's specification of java.math.BigInteger.
  *
  * @version $Revision: 1388 $
@@ -45,7 +46,6 @@ public /*@ pure @*/ class BigInteger extends Number implements Comparable {
     //--- public model \bigint value; --
     //@ public model int sign;
     //@ public represents sign = signum();
-    //@ public invariant sign == compareTo(ZERO);
 
 
     /*@ public normal_behavior
@@ -71,7 +71,7 @@ public /*@ pure @*/ class BigInteger extends Number implements Comparable {
     //@ pure
     public BigInteger(int signum, /*@ non_null @*/ byte[] magnitude);
 
-    /*@  public normal_behavior
+    /*-RAC@  public normal_behavior
       @     requires val != null && !val.equals("");
       @     requires radix > 1;
       @     ensures this.equals(parse(val,radix));
@@ -93,7 +93,7 @@ public /*@ pure @*/ class BigInteger extends Number implements Comparable {
     //@ pure
     BigInteger(char[] val);
 
-    /*@  public normal_behavior
+    /*-RAC@  public normal_behavior
       @     requires val != null && !val.equals("");
       @     ensures this.equals(parse(val,10));
       @ also
@@ -119,7 +119,7 @@ public /*@ pure @*/ class BigInteger extends Number implements Comparable {
     public static /*@ pure @*/ BigInteger probablePrime(int bitLength,
                                                           Random rnd);
 
-    // boolean primeToCertainty(int certainty);
+    boolean primeToCertainty(int certainty, java.util.Random r); // CHANGED in 1.6
 
     private static int jacobiSymbol(int p, BigInteger n);
 
@@ -127,17 +127,17 @@ public /*@ pure @*/ class BigInteger extends Number implements Comparable {
 
     //Static Factory Methods
 
-    public static /*@ pure @*/ BigInteger valueOf(long val);
+    public static /*@ pure helper @*/ BigInteger valueOf(long val);
 
-    final int signum;
-    final int[] mag; 
+    // int signum;   package-level field removed from specification (dmz, 2009-11-17)
+    // int[] mag;    package-level field removed from specification (dmz, 2009-11-17)
     public static final BigInteger ZERO;
     public static final BigInteger ONE;
 
-    //@ public invariant ZERO != null && ZERO.equals(valueOf(0L));
+    //@ public invariant ZERO != null && ZERO.longValue() == 0L;
     //@ public invariant ZERO.equals(ZERO);
     //@ public constraint ZERO == \old(ZERO);
-    //@ public invariant ONE != null && ONE.equals(valueOf(1L));
+    //@ public invariant ONE != null && ONE.longValue() == 1L;
     //@ public invariant ONE.equals(ONE);
     //@ public invariant !ZERO.equals(ONE);
     //@ public constraint ONE == \old(ONE);
@@ -233,15 +233,15 @@ public /*@ pure @*/ class BigInteger extends Number implements Comparable {
 
     public int bitLength();
 
-    //static int bitLen(int w);
+    // static int bitLen(int w);   package-level method removed from specification (dmz, 2009-11-17)
 
-    //static final byte[] trailingZeroTable;
+    // static final byte[] trailingZeroTable;   package-level array removed from specification (dmz, 2009-11-17)
 
     public int bitCount();
 
-    //static int bitCnt(int val);
+    // static int bitCnt(int val);   package-level method removed from specification (dmz, 2009-11-17)
 
-    //static int trailingZeroCnt(int val);
+    // static int trailingZeroCnt(int val);   package-level method removed from specification (dmz, 2009-11-17)
 
     // Primality Testing
 
@@ -251,13 +251,12 @@ public /*@ pure @*/ class BigInteger extends Number implements Comparable {
 
     public int compareTo(BigInteger val);
 
-
     /*@ also public normal_behavior
       @   requires x != null && x instanceof BigInteger;
       @   assignable \nothing;
       @   ensures \result == x.equals(this);
       @*/
-    public /*@ pure @*/ boolean equals(Object x);
+    public /*@ pure helper @*/ boolean equals(Object x);
 
     public BigInteger min(BigInteger val);
 
@@ -268,32 +267,37 @@ public /*@ pure @*/ class BigInteger extends Number implements Comparable {
     public int hashCode();
 
     //@  ensures \result != null;
-    //@ ensures  parse(\result,radix).equals(this);
+    //-RAC@ ensures  parse(\result,radix).equals(this);
     public String toString(int radix);
 
     //@ also
     //@ ensures \result != null;
-    //@ ensures  parse(\result,10).equals(this);
+    //-RAC@ ensures  parse(\result,10).equals(this);
     public String toString();
 
     //@ ensures convert(\result).equals(this);
     //@ ensures_redundantly this.equals(\old(this));
+    //@ pure helper
     public byte[] toByteArray();
 
     //@ also
     //@ ensures_redundantly this.equals(\old(this));
+    //@ pure helper
     public int intValue();
 
     //@ also
     //@ ensures_redundantly this.equals(\old(this));
+    //@ pure helper
     public long longValue();
 
     //@ also
     //@ ensures_redundantly this.equals(\old(this));
+    //@ pure helper
     public float floatValue();
 
     //@ also
     //@ ensures_redundantly this.equals(\old(this));
+    //@ pure helper
     public double doubleValue();
 
 }

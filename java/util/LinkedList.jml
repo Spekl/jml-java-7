@@ -25,8 +25,10 @@ package java.util;
  * @author Erik Poll
  */
 
+// Java 1.6: Differs from Java 1.5 in the added interface Deque<E>
+
 public class LinkedList<E> extends AbstractSequentialList<E>
-    implements List<E>, Cloneable, java.io.Serializable, Iterable<E>, Collection<E>, Queue<E>
+    implements List<E>, Cloneable, java.io.Serializable, Deque<E>
 {
 	
     /*@ public normal_behavior

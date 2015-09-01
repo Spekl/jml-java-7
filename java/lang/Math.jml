@@ -1,4 +1,7 @@
 // This file is part of JML
+// This includes all the Java 1.5 specs for java.lang.Math, and we
+// want to fix that as soon as possible with some sort of refinement
+// mechanism.
 
 // JML is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -18,7 +21,7 @@ package java.lang;
 import java.util.Random;
 
 /** 
- * JML specification for java.lang.Math in J2SE 5.0.
+ * JML specification for java.lang.Math in J2SE 6.0.
  *
  * @version OpenJML 1.0
  * @author Brandon Shilling
@@ -911,6 +914,220 @@ public /*@ pure @*/ final class Math {
       @ |}
       @*/
     public static /*@ pure @*/ double log1p(double x);
+    
+    // new for Java 6
+    /*@ public normal_behavior
+      @ {| 
+      @   requires Double.isNaN(magnitude);
+      @   ensures Double.isNaN(\result);
+      @ also
+      @   requires !Double.isNaN(magnitude) && Double.isNaN(sign);
+      @   ensures abs(\result) == abs(magnitude);
+      @ also
+      @   requires !Double.isNaN(magnitude) && !Double.isNaN(sign);
+      @   ensures abs(\result) == abs(magnitude);
+      @   ensures signum(\result) == signum(sign);
+      @ |}
+      @*/
+    public static /*@ pure @*/ double copySign(double magnitude, double sign);
+    
+    // new for Java 6
+    /*@ public normal_behavior
+      @ {| 
+      @   requires Float.isNaN(magnitude);
+      @   ensures Float.isNaN(\result);
+      @ also
+      @   requires !Float.isNaN(magnitude) && Float.isNaN(sign);
+      @   ensures abs(\result) == abs(magnitude);
+      @ also
+      @   requires !Float.isNaN(magnitude) && !Float.isNaN(sign);
+      @   ensures abs(\result) == abs(magnitude);
+      @   ensures signum(\result) == signum(sign);
+      @ |}
+      @*/
+    public static /*@ pure @*/ float copySign(float magnitude, float sign);
+    
+    // new for Java 6
+    /*@ public normal_behavior
+      @ {|
+      @   requires Float.isNaN(f) || Float.isInfinite(f);
+      @   ensures \result == Float.MAX_EXPONENT + 1;
+      @ also
+      @   requires f == 0 || f < Float.MIN_NORMAL;
+      @   ensures \result == Float.MIN_EXPONENT - 1;
+      @ also
+      @   requires Float.MIN_NORMAL <= f && !Float.isInfinite(f);
+      @   ensures Float.MIN_EXPONENT <= \result
+      @        && \result <= Float.MAX_EXPONENT;
+      @   ensures (* result is the unbiased exponent of f *);
+      @ |}
+      @*/
+    public static /*@ pure @*/ int getExponent(float f);
+    
+    // new for Java 6
+    /*@ public normal_behavior
+      @ {|
+      @   requires Double.isNaN(d) || Double.isInfinite(d);
+      @   ensures \result == Double.MAX_EXPONENT + 1;
+      @ also
+      @   requires d == 0 || d < Double.MIN_NORMAL;
+      @   ensures \result == Double.MIN_EXPONENT - 1;
+      @ also
+      @   requires Double.MIN_NORMAL <= d && !Double.isInfinite(d);
+      @   ensures Double.MIN_EXPONENT <= \result
+      @        && \result <= Double.MAX_EXPONENT;
+      @   ensures (* result is the unbiased exponent of d *);
+      @ |}
+      @*/
+    public static /*@ pure @*/ int getExponent(double d);
+    
+    // new for Java 6
+    /*@ public normal_behavior
+      @ {|
+      @   requires Double.isNaN(start) || Double.isNaN(direction);
+      @   ensures Double.isNaN(\result);
+      @ also
+      @   requires start == direction;
+      @   ensures \result == direction;
+      @ also
+      @   requires start == Double.MIN_VALUE && signum(direction) == -1.0;
+      @   ensures \result == 0.0;
+      @ also
+      @   requires start == -Double.MIN_VALUE && signum(direction) == 1.0;
+      @   ensures \result == -0.0;
+      @ also 
+      @   requires start == Double.POSITIVE_INFINITY && signum(direction) == -1.0;
+      @   ensures \result == Double.MAX_VALUE;
+      @ also
+      @   requires start == Double.NEGATIVE_INFINITY && signum(direction) == 1.0;
+      @   ensures \result == -Double.MAX_VALUE;
+      @ also
+      @   requires start == Double.MAX_VALUE && signum(direction) == 1.0;
+      @   ensures \result == Double.POSITIVE_INFINITY;
+      @ also
+      @   requires start == Double.MIN_VALUE && signum(direction) == -1.0;
+      @   ensures \result == Double.NEGATIVE_INFINITY;
+      @ also
+      @   requires start != direction && isFinite(start)
+      @         && !Double.isNaN(direction) && signum(direction) == -1.0;
+      @   ensures \result < start;
+      @   ensures (* result is the number adjacent to start in the 
+      @              negative direction *);
+      @ also
+      @   requires start != direction && isFinite(start)
+      @         && !Double.isNaN(direction) && signum(direction) == 1.0;
+      @   ensures start < \result;
+      @   ensures (* result is the number adjacent to start in the 
+      @              positive direction *);
+      @ also
+      @   requires start != direction && isFinite(start)
+      @         && !Double.isNaN(direction) && signum(direction) == 0.0;
+      @   ensures \result == start;
+      @ |}
+      @*/     
+    public static /*@ pure @*/ double nextAfter(double start, double direction);
+    
+    // new for Java 6
+    /*@ public normal_behavior
+      @ {|
+      @   requires Float.isNaN(start) || Double.isNaN(direction);
+      @   ensures Float.isNaN(\result);
+      @ also
+      @   requires start == direction;
+      @   ensures \result == direction;
+      @ also
+      @   requires start == Float.MIN_VALUE && signum(direction) == -1.0;
+      @   ensures \result == 0.0;
+      @ also
+      @   requires start == -Float.MIN_VALUE && signum(direction) == 1.0;
+      @   ensures \result == -0.0;
+      @ also 
+      @   requires start == Float.POSITIVE_INFINITY && signum(direction) == -1.0;
+      @   ensures \result == Float.MAX_VALUE;
+      @ also
+      @   requires start == Float.NEGATIVE_INFINITY && signum(direction) == 1.0;
+      @   ensures \result == -Float.MAX_VALUE;
+      @ also
+      @   requires start == Float.MAX_VALUE && signum(direction) == 1.0;
+      @   ensures \result == Float.POSITIVE_INFINITY;
+      @ also
+      @   requires start == Float.MIN_VALUE && signum(direction) == -1.0;
+      @   ensures \result == Float.NEGATIVE_INFINITY;
+      @ also
+      @   requires start != direction && isFinite(start)
+      @         && !Double.isNaN(direction) && signum(direction) == -1.0;
+      @   ensures \result < start;
+      @   ensures (* result is the number adjacent to start in the 
+      @              negative direction *);
+      @ also
+      @   requires start != direction && isFinite(start)
+      @         && !Double.isNaN(direction) && signum(direction) == 1.0;
+      @   ensures start < \result;
+      @   ensures (* result is the number adjacent to start in the 
+      @              positive direction *);
+      @ also
+      @   requires start != direction && isFinite(start)
+      @         && !Double.isNaN(direction) && signum(direction) == 0.0;
+      @   ensures \result == start;
+      @ |}
+      @*/     
+    public static /*@ pure @*/ float nextAfter(float start, double direction);
+    
+    // new for Java 6
+    //@ ensures \result == nextAfter(d, Double.POSITIVE_INFINITY);
+    public static /*@ pure @*/ double nextUp(double d);
+    
+    // new for Java 6
+    //@ ensures \result == nextAfter(f, Float.POSITIVE_INFINITY);
+    public static /*@ pure @*/ float nextUp(float f);
+    
+    // new for Java 6
+    /*@ public normal_behavior
+      @ {|
+      @   requires Double.isNaN(d);
+      @   ensures Double.isNaN(\result);
+      @ also
+      @   requires Double.isInfinite(d);
+      @   ensures Double.isInfinite(\result);
+      @ also
+      @   requires d == 0;
+      @   ensures \result == 0;
+      @ also
+      @   requires !Double.isNaN(d);
+      @   ensures signum(\result) == signum(d);
+      @   ensures 
+      @     (* result is {@code f} &times; 2<sup>{@code scaleFactor}</sup> 
+      @        rounded as if performed by a single correctly rounded 
+      @        floating-point multiply to a member of the double value set *);
+      @ |}
+      @*/
+    public static /*@ pure @*/ double scalb(double d, int scaleFactor);
+    
+    // new for Java 6
+    /*@ public normal_behavior
+      @ {|
+      @   requires Float.isNaN(f);
+      @   ensures Float.isNaN(\result);
+      @ also
+      @   requires Float.isInfinite(f);
+      @   ensures Float.isInfinite(\result);
+      @ also
+      @   requires f == 0;
+      @   ensures \result == 0;
+      @ also
+      @   requires !Float.isNaN(f);
+      @   ensures signum(\result) == signum(f);
+      @   ensures 
+      @     (* result is {@code f} &times; 2<sup>{@code scaleFactor}</sup> 
+      @        rounded as if performed by a single correctly rounded 
+      @        floating-point multiply to a member of the float value set *);
+      @ |}
+      @*/
+    public static /*@ pure @*/ float scalb(float f, int scaleFactor);
+    
+    
+    
+    
     
     // model methods to help make some of the special cases
     // easier to deal with

@@ -37,10 +37,10 @@ public final class Class<T> implements java.io.Serializable,
     //@ pure
     public String toString();
 
-    /// *@ also public normal_behavior
-      // @   ensures \result <==> (this == o);
-      // @*/
-    // // @ pure function 
+    // @ also public normal_behavior
+    // @   ensures \result <==> (this == o);
+    // @
+    // @ pure function 
     //public boolean equals(Object o);
 
     /*@   public normal_behavior
@@ -116,17 +116,20 @@ public final class Class<T> implements java.io.Serializable,
     //@ public model boolean _isArray;
     //@        represents _isArray = isArray();
 
+    /*
     //@ ensures \result == _isArray;
-    //@ ensures \elemtype(this) <: Object.class ==> \result;
-    //@ ensures \elemtype(this) == int.class ==> \result;
-    //@ ensures \elemtype(this) == byte.class ==> \result;
-    //@ ensures \elemtype(this) == short.class ==> \result;
-    //@ ensures \elemtype(this) == long.class ==> \result;
-    //@ ensures \elemtype(this) == char.class ==> \result;
-    //@ ensures \elemtype(this) == float.class ==> \result;
-    //@ ensures \elemtype(this) == double.class ==> \result;
-    //@ ensures \elemtype(this) == boolean.class ==> \result;
+    //@ ensures \elemtype(\typeof(this)) <: \type(Object) ==> \result;
+    //@ ensures \elemtype(\typeof(this)) == \type(int) ==> \result;
+    //@ ensures \elemtype(\typeof(this)) == \type(byte) ==> \result;
+    //@ ensures \elemtype(\typeof(this)) == \type(short) ==> \result;
+    //@ ensures \elemtype(\typeof(this)) == \type(long) ==> \result;
+    //@ ensures \elemtype(\typeof(this)) == \type(char) ==> \result;
+    //@ ensures \elemtype(\typeof(this)) == \type(float) ==> \result;
+    //@ ensures \elemtype(\typeof(this)) == \type(double) ==> \result;
+    //@ ensures \elemtype(\typeof(this)) == \type(boolean) ==> \result;
 	// FIXME - really need a better way to express this
+	 * */
+    //
     public /*@ pure @*/ boolean isArray();
 
     /*@ public normal_behavior
@@ -158,7 +161,7 @@ public final class Class<T> implements java.io.Serializable,
 
     public /*@ pure @*/ Package getPackage();
 
-    public /*@ pure @*/ Class<?>[] getInterfaces();
+    public /*@ pure @*/ Class<?>[] getInterfaces(); // CHANGED in 1.6
 
     public /*@ pure @*/ Class<?> getComponentType();
 
@@ -170,13 +173,13 @@ public final class Class<T> implements java.io.Serializable,
 
     public /*@ pure @*/ Class<?> getDeclaringClass();
 
-    public /*@ pure @*/ Class<?>[] getClasses();
+    public /*@ pure @*/ Class<?>[] getClasses(); // CHANGED in 1.6
 
     public /*@ pure @*/ Field[] getFields() throws SecurityException;
 
     public /*@ pure non_null @*/ Method[] getMethods() throws SecurityException;
 
-    public /*@ pure non_null @*/ Constructor<?>[] getConstructors() throws SecurityException;
+    public /*@ pure non_null @*/ Constructor<?>[] getConstructors() throws SecurityException; // CHANGED in 1.6
 
     public /*@ pure @*/ Field getField(String name)
         throws NoSuchFieldException, SecurityException;
@@ -189,7 +192,7 @@ public final class Class<T> implements java.io.Serializable,
 
     //@ ensures \result != null;
     //@ ensures \nonnullelements(\result);
-    public /*@ pure @*/ Class<?>[] getDeclaredClasses() throws SecurityException;
+    public /*@ pure @*/ Class<?>[] getDeclaredClasses() throws SecurityException; // CHANGED in 1.6
 
     //@ ensures \result != null;
     //@ ensures \nonnullelements(\result);
@@ -199,7 +202,7 @@ public final class Class<T> implements java.io.Serializable,
     //@ ensures \nonnullelements(\result);
     public /*@ pure @*/ Method[] getDeclaredMethods() throws SecurityException;
 
-    public /*@ pure @*/ Constructor<?>[] getDeclaredConstructors() throws SecurityException;
+    public /*@ pure @*/ Constructor<?>[] getDeclaredConstructors() throws SecurityException; // CHANGED in 1.6
 
 
     //@ non_null
