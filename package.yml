@@ -1,5 +1,5 @@
 name        : jml-java-5   # name of the package
-version     : 1.5-2        # version of the package
+version     : 1.5-3        # version of the package
 kind        : spec         # one of tool or spec(s)
 description : JML Specifications for the Java Language, Version 5.
 extends     : jml-java-4              
