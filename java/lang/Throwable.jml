@@ -52,26 +52,26 @@ public class Throwable extends Object implements java.io.Serializable
       @ public normal_behavior
       @   ensures \result == (_message == null && !causeSet);
       @
-        public pure model boolean standardThrowable();
+        public pure helper model boolean standardThrowable();
 
       @ public normal_behavior
       @   ensures \result == (_message == s && !causeSet);
       @
-        public pure model boolean standardThrowable(non_null String s);
+        public pure helper model boolean standardThrowable(non_null String s);
 
       @ public normal_behavior
       @   requires c != this;
       @   ensures \result == (initMessage(c) && _cause == c);
       @   ensures_redundantly causeSet;
       @
-        public pure model boolean standardThrowable(nullable Throwable c);
+        public pure helper model boolean standardThrowable(nullable Throwable c);
 
       @ public normal_behavior
       @   requires c != this;
       @   ensures \result == (_message == s && _cause == c);
       @   ensures_redundantly causeSet;
       @
-        public pure model boolean standardThrowable(non_null String s, nullable Throwable c);
+        public pure helper model boolean standardThrowable(non_null String s, nullable Throwable c);
 
       @ public normal_behavior
       @   requires c != null;
@@ -80,7 +80,7 @@ public class Throwable extends Object implements java.io.Serializable
       @   requires c == null;
       @   ensures  \result == (_message == null);
       @
-        public pure model boolean initMessage(nullable Throwable c);
+        public pure helper model boolean initMessage(nullable Throwable c);
       @*/
 
     /*@ public normal_behavior
@@ -139,7 +139,7 @@ public class Throwable extends Object implements java.io.Serializable
       @  requires !causeSet;
       @  ensures \result == null;
       @*/
-    public /*@pure*//*@nullable*/ Throwable getCause();
+    synchronized public /*@pure*//*@nullable*/ Throwable getCause();
 
     /*@ public normal_behavior
       @   requires !causeSet && cause != this;
@@ -155,10 +155,10 @@ public class Throwable extends Object implements java.io.Serializable
       @*/
     public synchronized /*@non_null*/ Throwable initCause(/*@non_null*/Throwable cause);
 
-    /*@ also public normal_behavior
+    /*-RAC@ also public normal_behavior
       @   requires \typeof(this) == \type(Throwable);
-      @   ensures _message == null ==> \result.equals(this.getClass().theString);
-      @   ensures _message != null ==> \result.equals(this.getClass().theString + ": " + _message);
+      @   ensures _message == null ==> \result.equals(this.getClass().toString());
+      @   ensures _message != null ==> \result.equals(this.getClass().toString() + ": " + _message);
       @ 
       @*/
     public /*@ pure non_null @*/ String toString();
@@ -174,7 +174,7 @@ public class Throwable extends Object implements java.io.Serializable
       @   assignable _stackTrace;
       @   ensures \result == this;
       @*/
-    public synchronized native /*@non_null*/ Throwable fillInStackTrace();
+    public synchronized /*@non_null*/ Throwable fillInStackTrace();
 
     /*+@ public normal_behavior  // FIXME - this crashes Simplify
       @   ensures \result != null;

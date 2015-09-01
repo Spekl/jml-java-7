@@ -86,7 +86,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
     private   /*@ spec_public @*/ TimeZone      zone;
     private   /*@ spec_public @*/ int           firstDayOfWeek;
     private   /*@ spec_public @*/ int           minimalDaysInFirstWeek;
-    private   /*@ spec_public @*/ static        Hashtable<Locale,int[]> cachedLocaleData;
+    private   /*@ spec_public @*/ static final  java.util.concurrent.ConcurrentMap<Locale,int[]> cachedLocaleData;
     
     private /*@ spec_public @*/ static final int UNSET;
     private /*@ spec_public @*/ static final int COMPUTED;

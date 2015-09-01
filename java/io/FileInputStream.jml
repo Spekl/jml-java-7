@@ -45,7 +45,7 @@ public class FileInputStream extends InputStream {
     /*@
       @ 
       @*/
-    public native int read() throws IOException;
+    public int read() throws IOException;  // No 'native' in 1.7.0_67; there is in 1.7.0_11
 
     /*@
       @ 
